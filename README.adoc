@@ -10,3 +10,10 @@ Its target is to allow building https://github.com/opencontainers/image-spec[OCI
 == Build Image
 
 Build the docker image with `docker build -t <name> ./`.
+
+== Test Image
+
+Test the docker image with https://github.com/GoogleContainerTools/container-structure-test[Google Container Test] installed:
+
+[source,bash]
+container-structure-test test --driver tar --image <name> --config ./cst.yml

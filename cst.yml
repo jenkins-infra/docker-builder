@@ -1,0 +1,7 @@
+---
+schemaVersion: 2.0.0
+fileExistenceTests:
+- name: 'Google Container Test CLI'
+  path: '/usr/local/bin/container-structure-test'
+  shouldExist: true
+...
