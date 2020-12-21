@@ -1,0 +1,12 @@
+= Docker Image for Building Docker Images
+
+image::https://i.imgur.com/d7KZNKD.png[Inception,width=400]
+
+This repository hosts the resources to build a Docker Image
+used for... building Docker Images.
+
+Its target is to allow building https://github.com/opencontainers/image-spec[OCI compliant images] in rootless or daemonless contexts as Kubernetes non privileged pods.
+
+== Build Image
+
+Build the docker image with `docker build -t <name> ./`.

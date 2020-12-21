@@ -1,0 +1,1 @@
+buildDockerAndPublishImage('builder', [mainBranch: 'main'])
