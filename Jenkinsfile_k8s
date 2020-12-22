@@ -38,8 +38,8 @@ metadata:
   labels:
     jenkins: "agent"
   annotations:
-    container.apparmor.security.beta.kubernetes.io/img: unconfined
-    container.seccomp.security.alpha.kubernetes.io/img: unconfined
+    container.apparmor.security.beta.kubernetes.io/dev: unconfined
+    container.seccomp.security.alpha.kubernetes.io/dev: unconfined
 spec:
   tolerations:
   - key: "os"
@@ -69,11 +69,12 @@ spec:
             - highmemlinux
   restartPolicy: "Never"
   containers:
-    - name: docker-builder
+    - name: dev
       image: dduportal/docker-builder
       command:
       - cat
       tty: true
+      '''
     }
   }
 
@@ -113,6 +114,7 @@ spec:
                   --label "org.opencontainers.image.created=$BUILD_DATE" \
                   --label "org.label-schema.build-date=$BUILD_DATE" \
                   -f $DOCKERFILE \
+                  -o type=docker,dest=image.tar \
                   .
           '''
         }
@@ -122,7 +124,7 @@ spec:
       steps {
         container('dev') {
           sh '''
-          container-structure-test test --driver tar --image $IMAGE_NAME --config ./cst.yml
+          container-structure-test test --driver tar --image image.tar --config ./cst.yml
           '''
         }
       }
