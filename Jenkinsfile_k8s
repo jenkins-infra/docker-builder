@@ -89,6 +89,7 @@ spec:
     buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
     timeout(time: 60, unit: "MINUTES")
     ansiColor("xterm")
+    preserveStashes()
   }
 
   stages {
@@ -98,47 +99,26 @@ spec:
           withCredentials([usernamePassword(credentialsId: config.credentials, usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PSW')]) {
             sh "echo $DOCKER_PSW | img login -u $DOCKER_USR --password-stdin"
           }
-          sh '''
-            export GIT_COMMIT_REV=$(git log -n 1 --pretty=format:'%h')
-            export GIT_SCM_URL=$(git remote show origin | grep 'Fetch URL' | awk '{print $3}')
-            export SCM_URI=$(echo $GIT_SCM_URL | awk '{print gensub("git@github.com:","https://github.com/",$3)}')
-
-            img build \
-              -t $IMAGE_NAME \
-              --build-arg "GIT_COMMIT_REV=$GIT_COMMIT_REV" \
-              --build-arg "GIT_SCM_URL=$GIT_SCM_URL" \
-              --build-arg "BUILD_DATE=$BUILD_DATE" \
-              --label "org.opencontainers.image.source=$GIT_SCM_URL" \
-              --label "org.label-schema.vcs-url=$GIT_SCM_URL" \
-              --label "org.opencontainers.image.url=$SCM_URI" \
-              --label "org.label-schema.url=$SCM_URI" \
-              --label "org.opencontainers.image.revision=$GIT_COMMIT_REV" \
-              --label "org.label-schema.vcs-ref=$GIT_COMMIT_REV" \
-              --label "org.opencontainers.image.created=$BUILD_DATE" \
-              --label "org.label-schema.build-date=$BUILD_DATE" \
-              -f $DOCKERFILE \
-              .
-          '''
-          sh 'img save --output=./image.tar $IMAGE_NAME'
-        } // container
-      } // steps
+          sh 'make build'
+          sh 'make image.tar'
+          stash name: 'image', includes: 'image.tar'
+        }
+      }
     } // stage
     stage("Test") {
       steps {
         container('dev') {
-          sh '''
-          container-structure-test test --driver tar --image image.tar --config ./cst.yml
-          '''
-        } // container
-      } // steps
+          unstash 'image'
+          sh 'make test'
+        }
+      }
     } // stage
     stage("Deploy latest") {
       when { branch "${config.mainBranch}" }
       steps {
         container('dev') {
-          sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${config.mainBranch}"
-          sh "img push ${config.registry}${imageName}:${config.mainBranch}"
-          sh "img push ${config.registry}${imageName}"
+          sh "IMAGE_DEPLOY=${IMAGE_NAME}:${config.mainBranch} make deploy"
+          sh "IMAGE_DEPLOY=${IMAGE_NAME}:latest make deploy"
           script {
             if (currentBuild.description) {
               currentBuild.description = currentBuild.description + " / "
@@ -152,8 +132,7 @@ spec:
       when { buildingTag() }
       steps {
         container('dev') {
-          sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${TAG_NAME}"
-          sh "img push ${config.registry}${imageName}:${TAG_NAME}"
+          sh "IMAGE_DEPLOY=${IMAGE_NAME}:${TAG_NAME} make deploy"
           script {
             if (currentBuild.description) {
               currentBuild.description = currentBuild.description + " / "
