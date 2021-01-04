@@ -114,9 +114,9 @@ spec:
               --label "org.opencontainers.image.created=$BUILD_DATE" \
               --label "org.label-schema.build-date=$BUILD_DATE" \
               -f $DOCKERFILE \
-              -o type=docker,dest=image.tar \
               .
           '''
+          sh 'img save --output=./image.tar $IMAGE_NAME'
         }
       }
     } // stage
