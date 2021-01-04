@@ -70,7 +70,7 @@ spec:
   restartPolicy: "Never"
   containers:
     - name: dev
-      image: dduportal/docker-builder
+      image: jenkinsciinfra/builder:latest
       command:
       - cat
       tty: true
@@ -95,6 +95,9 @@ spec:
     stage("Build") {
       steps {
         container('dev') {
+          withCredentials([usernamePassword(credentialsId: config.credentials, usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PSW')]) {
+            sh "echo $DOCKER_PSW | img login -u $DOCKER_USR --password-stdin"
+          }
           sh '''
             export GIT_COMMIT_REV=$(git log -n 1 --pretty=format:'%h')
             export GIT_SCM_URL=$(git remote show origin | grep 'Fetch URL' | awk '{print $3}')
@@ -117,8 +120,8 @@ spec:
               .
           '''
           sh 'img save --output=./image.tar $IMAGE_NAME'
-        }
-      }
+        } // container
+      } // steps
     } // stage
     stage("Test") {
       steps {
@@ -126,47 +129,46 @@ spec:
           sh '''
           container-structure-test test --driver tar --image image.tar --config ./cst.yml
           '''
-        }
-      }
+        } // container
+      } // steps
     } // stage
     stage("Deploy latest") {
       when { branch "${config.mainBranch}" }
       steps {
         container('dev') {
+          sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${config.mainBranch}"
+          sh "img push ${config.registry}${imageName}:${config.mainBranch}"
+          sh "img push ${config.registry}${imageName}"
           script {
-            sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${config.mainBranch}"
-            withCredentials([usernamePassword(credentialsId: config.credentials, usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PSW')]) {
-              sh "echo $DOCKER_PSW | img login -u $DOCKER_USR --password-stdin"
-            }
-            sh "img push ${config.registry}${imageName}:${config.mainBranch}"
-            sh "img push ${config.registry}${imageName}"
-            sh "img logout"
             if (currentBuild.description) {
               currentBuild.description = currentBuild.description + " / "
             }
             currentBuild.description = "${config.mainBranch} / ${GIT_COMMIT}"
-          }
-        }
-      }
+          } // script
+        } // container
+      } // steps
     } // stage
     stage("Deploy tag as tag") {
       when { buildingTag() }
       steps {
         container('dev') {
+          sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${TAG_NAME}"
+          sh "img push ${config.registry}${imageName}:${TAG_NAME}"
           script {
-            sh "img tag ${config.registry}${imageName} ${config.registry}${imageName}:${TAG_NAME}"
-            withCredentials([usernamePassword(credentialsId: config.credentials, usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PSW')]) {
-              sh "echo $DOCKER_PSW | img login -u $DOCKER_USR --password-stdin"
-            }
-            sh "img push ${config.registry}${imageName}:${TAG_NAME}"
-            sh "img logout"
             if (currentBuild.description) {
               currentBuild.description = currentBuild.description + " / "
             }
             currentBuild.description = "${TAG_NAME}"
-          }
-        }
-      }
+          } // script
+        } // container
+      } // steps
     } // stage
   } // stages
-}
+  post {
+    cleanup {
+      container('dev') {
+        sh "img logout"
+      } // container
+    } // cleanup
+  } // post
+} // pipeline
