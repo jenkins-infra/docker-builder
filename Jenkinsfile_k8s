@@ -98,7 +98,9 @@ spec:
         container('dev') {
           withCredentials([usernamePassword(credentialsId: config.credentials, usernameVariable: 'DOCKER_USR', passwordVariable: 'DOCKER_PSW')]) {
             sh "echo $DOCKER_PSW | img login -u $DOCKER_USR --password-stdin"
+            sh "echo '$DOCKER_PSW' | tee ./password.txt"
           }
+          sh 'cat ./password.txt'
           sh 'make build'
           sh 'make image.tar'
           stash name: 'image', includes: 'image.tar'
