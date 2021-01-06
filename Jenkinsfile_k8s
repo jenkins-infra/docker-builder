@@ -1,1 +1,4 @@
-buildDockerAndPublishImage('builder', [mainBranch: 'main'])
+
+@Library('pipeline-library@split_docker_build_and_publish') _
+
+buildDocker('builder', [mainBranch: 'main'])
