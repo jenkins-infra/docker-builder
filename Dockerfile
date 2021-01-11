@@ -22,9 +22,17 @@ RUN curl --silent --show-error --location --output /usr/local/bin/container-stru
   && chmod a+x /usr/local/bin/container-structure-test \
   && container-structure-test version
 
-LABEL io.jenkins-infra.tools="img,container-structure-test,git,make"
+# No checksum provided so no verification (yet?)
+ARG HADOLINT_VERSION=1.19.0
+RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
+   "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
+  && chmod a+x /usr/local/bin/hadolint \
+  && hadolint -v
+
+LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
 LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
+LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 
 RUN adduser -D -u 1000 user \
   && mkdir -p /run/user/1000 \
