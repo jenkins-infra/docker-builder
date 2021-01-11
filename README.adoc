@@ -9,41 +9,7 @@ Its target is to allow building https://github.com/opencontainers/image-spec[OCI
 
 image::https://mermaid.ink/img/eyJjb2RlIjoiZ3JhcGggTFJcbiAgICBBW0RvY2tlcmZpbGVdIC0tPnxtYWtlIGxpbnR8IEIoRG9ja2VyZmlsZSlcbiAgICBCIC0tPiB8bWFrZSBidWlsZHwgQ1tpbWFnZS50YXJdXG4gICAgQyAtLT4gfG1ha2UgdGVzdHwgRChpbWFnZS50YXIpXG4gICAgRCAtLT4gfG1ha2UgZGVwbG95fCBFKHJlZ2lzdHJ5LmRvY2tlci9pbWFnZTp0YWcpXG4gICAgRSAtLT4gfG1ha2UgcmVsZWFzZXwgRihyZWdpc3RyeS5kb2NrZXIvaW1hZ2U6bGF0ZXN0KVxuICBcbiAgICAgICAgICAgICIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9[link="https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZ3JhcGggTFJcbiAgICBBW0RvY2tlcmZpbGVdIC0tPnxtYWtlIGxpbnR8IEIoRG9ja2VyZmlsZSlcbiAgICBCIC0tPiB8bWFrZSBidWlsZHwgQ1tpbWFnZS50YXJdXG4gICAgQyAtLT4gfG1ha2UgdGVzdHwgRChpbWFnZS50YXIpXG4gICAgRCAtLT4gfG1ha2UgZGVwbG95fCBFKHJlZ2lzdHJ5LmRvY2tlci9pbWFnZTp0YWcpXG4gICAgRSAtLT4gfG1ha2UgcmVsZWFzZXwgRihyZWdpc3RyeS5kb2NrZXIvaW1hZ2U6bGF0ZXN0KVxuICBcbiAgICAgICAgICAgICIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9","Click on the Build Flow diagram to edit"]
 
-== Requirements
+== Contribute
 
-=== Bare Requirements
-
-* Command prompt with bash (or zsh/ksh)
-* GNU Make 3.81+
-* [Build,Deploy,Deploy] (Jessie Frazelle's) https://github.com/genuinetools/img[`genuinetools/img`] CLI in v0.5.11
-* [Test] https://github.com/GoogleContainerTools/container-structure-test[Google Container Test] CLI in v1.9.1
-
-If you cannot fulfil these requirements, please check the <<Using Docker>> section instead.
-
-=== Using Docker
-
-If you prefer to run all the below commands in a Docker image instead of the <<Bare Requirements>> (or if you cannot meet the bare-requirements):
-
-[source,bash]
-----
-docker run --rm --tty --interactive --volume=$(pwd):/app --workdir=/app --entrypoint=bash \
-  --security-opt seccomp=unconfined --security-opt apparmor=unconfined \
-  jenkinsciinfra/builder:latest
-> make help
-----
-
-== Build Image
-
-With the <<Requirements>> installed for the Build phase, you can build the image with the command `make build`.
-
-== Test Image
-
-With the <<Requirements>> installed for the Test phase, you can build the image with the command `make test`.
-
-== Deploy Image
-
-With the <<Requirements>> installed for the Deploy phase, you can build the image:
-
-- First by logging in to the Docker registry where you want to deploy the image to,
-with the command `img login <Registry's URL if it is not the DockerHub>`
-- Running the command `make deploy`
+If you want to contribute, or build/test the Docker Image, please refer to the following documentation about Docker images for the Jenkins Infra project:
+link:https://github.com/jenkins-infra/pipeline-library/blob/split_docker_build_and_publish/resources/io/jenkins/infra/docker/README.adoc[].
