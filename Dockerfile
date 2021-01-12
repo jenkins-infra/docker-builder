@@ -1,20 +1,22 @@
 # We need the official img image to retrieve the img and new*idmap binaries
 ARG IMG_VERSION=0.5.11
 FROM r.j3ss.co/img:v${IMG_VERSION} AS img
-# # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
+
+# Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM alpine:3.12
 RUN apk add --no-cache \
   # Recommended (even though not strictly required) for jenkins agents
-  bash \
+  bash=~5 \
   # Used to download binaries (implies the package "ca-certificates" as a dependency)
-  curl \
+  curl=~7 \
   # Dev. Tooling packages (e.g. tools provided by this image installable through Alpine Linux Packages)
-  git \
-  make \
+  git=~2 \
+  make=~4 \
   # Required for img's builds
-  pigz
+  pigz=~2.4
 
 ### Install Google's container-structure-test CLI
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # No checksum provided so no verification (yet?)
 ARG CST_VERSION=1.9.1
 RUN curl --silent --show-error --location --output /usr/local/bin/container-structure-test \
