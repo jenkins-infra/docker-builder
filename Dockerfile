@@ -16,10 +16,9 @@ RUN apk add --no-cache \
   # Required for img's builds
   pigz=~2.4
 
-### Install Google's container-structure-test CLI
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # No checksum provided so no verification (yet?)
-ARG CST_VERSION=1.9.1
+ARG CST_VERSION=1.10.0
 RUN curl --silent --show-error --location --output /usr/local/bin/container-structure-test \
    "https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64" \
   && chmod a+x /usr/local/bin/container-structure-test \
