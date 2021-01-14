@@ -15,7 +15,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.hadolint.version
       value: "1.19.0"
     - key: io.jenkins-infra.tools.container-structure-test.version
-      value: "1.9.1"
+      value: "1.10.0"
     - key: io.jenkins-infra.tools.img.version
       value: "0.5.11"
   entrypoint: []
@@ -65,4 +65,3 @@ fileContentTests:
   - name: 'subgid contains user 65,536 subordinate GIDs'
     path: '/etc/subgid'
     expectedContents: ['.*user:100000:65536.*']
-  
