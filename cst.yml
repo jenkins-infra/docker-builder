@@ -48,5 +48,21 @@ fileExistenceTests:
   - name: 'subgid'
     path: '/etc/subgid'
     shouldExist: true
+  - name: 'user directory'
+    path: '/run/user/1000'
+    shouldExist: true
+  - name: 'home user'
+    path: '/home/user'
+    shouldExist: true
 
 fileContentTests:
+  - name: 'image user created as non-root user'
+    path: '/etc/passwd'
+    expectedContents: ['.*user:x:1000:1000.*']
+  - name: 'subuid contains user with 65,536 subordinate UIDs'
+    path: '/etc/subuid'
+    expectedContents: ['.*user:100000:65536.*']
+  - name: 'subgid contains user 65,536 subordinate GIDs'
+    path: '/etc/subgid'
+    expectedContents: ['.*user:100000:65536.*']
+  
