@@ -23,25 +23,46 @@ metadataTest:
   workdir: "/app"
 
 fileExistenceTests:
-
   - name: 'Google Container Test CLI'
     path: '/usr/local/bin/container-structure-test'
     shouldExist: true
+    isExecutableBy: 'any'
   - name: 'HADOLINT'
     path: '/usr/local/bin/hadolint'
     shouldExist: true
-  - name: 'Root'
-    path: '/'
-    shouldExist: true
+    isExecutableBy: 'any'
   - name: 'img'
     path: '/usr/bin/img'
     shouldExist: true
+    isExecutableBy: 'any'
   - name: 'img newuidmap'
     path: '/usr/bin/newuidmap'
     shouldExist: true
+    isExecutableBy: 'any'
   - name: 'img newgidmap'
     path: '/usr/bin/newgidmap'
     shouldExist: true
+    isExecutableBy: 'any'
+  - name: 'Bash'
+    path: '/bin/bash'
+    shouldExist: true
+    isExecutableBy: 'any'
+  - name: 'Curl'
+    path: '/usr/bin/curl'
+    shouldExist: true
+    isExecutableBy: 'any'
+  - name: 'Make'
+    path: '/usr/bin/make'
+    shouldExist: true
+    isExecutableBy: 'any'
+  - name: 'Git'
+    path: '/usr/bin/git'
+    shouldExist: true
+    isExecutableBy: 'any'
+  - name: 'Git'
+    path: '/usr/bin/pigz'
+    shouldExist: true
+    isExecutableBy: 'any'
   - name: 'subuid'
     path: '/etc/subuid'
     shouldExist: true

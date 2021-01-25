@@ -1,10 +1,11 @@
-# We need the official img image to retrieve the img and new*idmap binaries
+# The official img's image is required to retrieve the img and new*idmap binaries
 ARG IMG_VERSION=0.5.11
 FROM r.j3ss.co/img:v${IMG_VERSION} AS img
 
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM alpine:3.12
-ARG IMG_VERSION=0.5.11
+## Repeating the ARG to add it into the scope of this image
+ARG IMG_VERSION
 RUN apk add --no-cache \
   # Recommended (even though not strictly required) for jenkins agents
   bash=~5 \
@@ -16,7 +17,9 @@ RUN apk add --no-cache \
   # Required for img's builds
   pigz=~2.4
 
+## bash need to be installed for this instruction to work as expected
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 ARG CST_VERSION=1.10.0
 RUN curl --silent --show-error --location --output /usr/local/bin/container-structure-test \
    "https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64" \
