@@ -41,19 +41,21 @@ LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
 LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
 LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 
-RUN adduser -D -u 1000 user \
-  && mkdir -p /run/user/1000 \
-  && chown -R user /run/user/1000 /home/user \
-  && echo user:100000:65536 | tee /etc/subuid | tee /etc/subgid
+ARG UID=1000
+ENV USER=infra
+ENV HOME=/home/"${USER}"
+ENV XDG_RUNTIME_DIR=/run/user/1000
+
+RUN adduser -D -u "${UID}" "${USER}" \
+  && mkdir -p "${XDG_RUNTIME_DIR}" \
+  && chown -R "${USER}" "${XDG_RUNTIME_DIR}" "${HOME}" \
+  && echo "${USER}":100000:65536 | tee /etc/subuid | tee /etc/subgid
 
 COPY --from=img /usr/bin/img /usr/bin/img
 COPY --from=img /usr/bin/newuidmap /usr/bin/newuidmap
 COPY --from=img /usr/bin/newgidmap /usr/bin/newgidmap
 
-USER user
-ENV USER=user
-ENV HOME=/home/user
-ENV XDG_RUNTIME_DIR=/run/user/1000
+USER "${USER}"
 
 CMD ["/bin/bash"]
 WORKDIR "/app"
