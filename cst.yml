@@ -4,11 +4,11 @@ schemaVersion: 2.0.0
 metadataTest:
   env:
     - key: "USER"
-      value: "user"
+      value: "infra"
     - key: "HOME"
-      value: "/home/user"
+      value: "/home/infra"
     - key: "XDG_RUNTIME_DIR"
-      value: "/run/user/1000"
+      value: "/run/infra/1000"
   labels:
     - key: io.jenkins-infra.tools
       value: "img,container-structure-test,git,make,hadolint"
@@ -69,23 +69,23 @@ fileExistenceTests:
   - name: 'subgid'
     path: '/etc/subgid'
     shouldExist: true
-  - name: 'user directory'
-    path: '/run/user/1000'
+  - name: 'temp directory for user infra'
+    path: '/run/infra/1000'
     shouldExist: true
-  - name: 'home user'
-    path: '/home/user'
+  - name: 'homedir of the user infra'
+    path: '/home/infra'
     shouldExist: true
 
 fileContentTests:
-  - name: 'image user created as non-root user'
+  - name: 'user infra exists'
     path: '/etc/passwd'
-    expectedContents: ['.*user:x:1000:1000.*']
-  - name: 'subuid contains user with 65,536 subordinate UIDs'
+    expectedContents: ['.*infra:x:1000:1000.*']
+  - name: 'subuid contains user infra with expected subordinate UIDs/GIDs'
     path: '/etc/subuid'
-    expectedContents: ['.*user:100000:65536.*']
-  - name: 'subgid contains user 65,536 subordinate GIDs'
+    expectedContents: ['.*infra:100000:65536.*']
+  - name: 'subgid contains user infra with expected subordinate UIDs/GIDs'
     path: '/etc/subgid'
-    expectedContents: ['.*user:100000:65536.*']
+    expectedContents: ['.*infra:100000:65536.*']
   - name: 'Base OS is the expected distribution and versions'
     path: '/etc/os-release'
     expectedContents: ['PRETTY_NAME="Alpine Linux v3.13"']

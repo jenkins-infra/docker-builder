@@ -44,7 +44,7 @@ LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 ARG UID=1000
 ENV USER=infra
 ENV HOME=/home/"${USER}"
-ENV XDG_RUNTIME_DIR=/run/user/1000
+ENV XDG_RUNTIME_DIR=/run/${USER}/1000
 
 RUN adduser -D -u "${UID}" "${USER}" \
   && mkdir -p "${XDG_RUNTIME_DIR}" \
