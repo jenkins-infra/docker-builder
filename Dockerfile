@@ -36,10 +36,21 @@ RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
   && chmod a+x /usr/local/bin/hadolint \
   && hadolint -v
 
-LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint"
+ARG GH_VERSION=1.8.1
+ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
+RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
+   "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
+  && sha256sum /tmp/gh.tar.gz | grep -q "${GH_SHASUM_256}" \
+  && tar xvfz /tmp/gh.tar.gz -C /tmp \
+  && mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh \
+  && chmod a+x /usr/local/bin/gh \
+  && gh --help
+
+LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
 LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
 LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
+LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 
 ARG UID=1000
 ENV USER=infra
