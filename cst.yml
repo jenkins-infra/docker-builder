@@ -65,7 +65,7 @@ fileExistenceTests:
     path: '/usr/bin/git'
     shouldExist: true
     isExecutableBy: 'any'
-  - name: 'Git'
+  - name: 'Pigz'
     path: '/usr/bin/pigz'
     shouldExist: true
     isExecutableBy: 'any'
