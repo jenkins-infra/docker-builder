@@ -5,7 +5,7 @@ FROM r.j3ss.co/img:v${IMG_VERSION} AS img
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM alpine:3.13
 ## Repeating the ARG to add it into the scope of this image
-ARG IMG_VERSION
+ARG IMG_VERSION=0.5.11
 RUN apk add --no-cache \
   # Recommended (even though not strictly required) for jenkins agents
   bash=~5 \
