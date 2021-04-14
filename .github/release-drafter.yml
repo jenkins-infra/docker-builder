@@ -1,0 +1,27 @@
+# Please note that emoji usages follows this guide: https://gitmoji.dev/
+---
+template: |
+  ## What’s Changed
+
+  $CHANGES
+categories:
+  - title: '✨ New Features/ Enhancements'
+    labels:
+      - 'feature'
+      - 'enhancement'
+      - 'feat'
+      - 'improvement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+  - title: '📝 Documentation'
+    labels:
+      - 'documentation'
+      - 'doc'
+      - 'docs'
+exclude-labels:
+  - 'skip-changelog'
+  - 'work-in-progress'
+...
