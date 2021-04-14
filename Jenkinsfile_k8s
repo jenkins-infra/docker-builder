@@ -1,1 +1,19 @@
-buildDockerAndPublishImage('builder', [mainBranch: 'main'])
+
+parallel(
+  failFast: true,
+  'docker-image': {
+    buildDockerAndPublishImage('builder', [
+      mainBranch: 'main',
+      automaticSemanticVersioning: true,
+      gitCredentials: 'github-app-infra'
+    ])
+  },
+  'updatecli': {
+    withCredentials([string(credentialsId: 'updatecli-github-token', variable: 'UPDATECLI_GITHUB_TOKEN')]) {
+      updatecli(action: 'diff')
+      if (env.BRANCH_NAME == 'main') {
+        updatecli(action: 'apply')
+      }
+    }
+  },
+)
