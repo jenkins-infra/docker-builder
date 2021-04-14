@@ -28,7 +28,7 @@ RUN curl --silent --show-error --location --output /usr/local/bin/container-stru
   && chmod a+x /usr/local/bin/container-structure-test \
   && container-structure-test version
 
-ARG HADOLINT_VERSION=1.19.0
+ARG HADOLINT_VERSION=2.1.0
 # ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
 RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
    "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
