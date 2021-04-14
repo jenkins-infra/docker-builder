@@ -21,26 +21,26 @@ RUN apk add --no-cache \
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG CST_VERSION=1.10.0
-ARG CST_SHASUM_256="72deeea26c990274725a325cf14acd20b8404251c4fcfc4d34b7527aac6c28bc"
+# ARG CST_SHASUM_256="72deeea26c990274725a325cf14acd20b8404251c4fcfc4d34b7527aac6c28bc"
 RUN curl --silent --show-error --location --output /usr/local/bin/container-structure-test \
    "https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64" \
-  && sha256sum /usr/local/bin/container-structure-test | grep -q "${CST_SHASUM_256}" \
+# && sha256sum /usr/local/bin/container-structure-test | grep -q "${CST_SHASUM_256}" \
   && chmod a+x /usr/local/bin/container-structure-test \
   && container-structure-test version
 
 ARG HADOLINT_VERSION=1.19.0
-ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
+# ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
 RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
    "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
-  && sha256sum /usr/local/bin/hadolint | grep -q "${HADOLINT_SHASUM_256}" \
+# && sha256sum /usr/local/bin/hadolint | grep -q "${HADOLINT_SHASUM_256}" \
   && chmod a+x /usr/local/bin/hadolint \
   && hadolint -v
 
 ARG GH_VERSION=1.8.1
-ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
+# ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
    "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
-  && sha256sum /tmp/gh.tar.gz | grep -q "${GH_SHASUM_256}" \
+# && sha256sum /tmp/gh.tar.gz | grep -q "${GH_SHASUM_256}" \
   && tar xvfz /tmp/gh.tar.gz -C /tmp \
   && mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh \
   && chmod a+x /usr/local/bin/gh \
