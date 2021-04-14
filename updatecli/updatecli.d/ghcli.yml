@@ -1,0 +1,66 @@
+---
+title: "Bump ghcli version"
+sources:
+  getGhcliVersion:
+    kind: githubRelease
+    name: Get the latest Ghcli version
+    spec:
+      owner: "cli"
+      repository: "cli"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionFilter:
+        kind: latest
+    transformers:
+      - trimPrefix: "v"
+conditions:
+  testDockerfileArgGhcliVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is GH_VERSION?"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "GH_VERSION"
+  testGhcliGhcliVersion:
+    name: "Does the test harness checks for a label label io.jenkins-infra.tools.gh.version?"
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[4].key"
+      value: io.jenkins-infra.tools.gh.version
+targets:
+  updateGhcliGhcliVersion:
+    name: "Update the label io.jenkins-infra.tools.gh.version in the test harness"
+    sourceID: getGhcliVersion
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[4].value"
+    scm:
+      github:
+        user: "{{ .github.user }}"
+        email: "{{ .github.email }}"
+        owner: "{{ .github.owner }}"
+        repository: "{{ .github.repository }}"
+        token: "{{ requiredEnv .github.token }}"
+        username: "{{ .github.username }}"
+        branch: "{{ .github.branch }}"
+  updateDockerfileArgGhcliVersion:
+    name: "Update the value of ARG GH_VERSION in the Dockerfile"
+    sourceID: getGhcliVersion
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "GH_VERSION"
+    scm:
+      github:
+        user: "{{ .github.user }}"
+        email: "{{ .github.email }}"
+        owner: "{{ .github.owner }}"
+        repository: "{{ .github.repository }}"
+        token: "{{ requiredEnv .github.token }}"
+        username: "{{ .github.username }}"
+        branch: "{{ .github.branch }}"

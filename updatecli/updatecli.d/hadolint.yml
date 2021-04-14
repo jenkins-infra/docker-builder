@@ -1,0 +1,66 @@
+---
+title: "Bump hadolint version"
+sources:
+  getHadolintVersion:
+    kind: githubRelease
+    name: Get the latest Hadolint version
+    spec:
+      owner: "hadolint"
+      repository: "hadolint"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionFilter:
+        kind: latest
+    transformers:
+      - trimPrefix: "v"
+conditions:
+  testDockerfileArgHadolintVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is HADOLINT_VERSION?"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "HADOLINT_VERSION"
+  testHadolintHadolintVersion:
+    name: "Does the test harness checks for a label label io.jenkins-infra.tools.hadolint.version?"
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[1].key"
+      value: io.jenkins-infra.tools.hadolint.version
+targets:
+  updateHadolintHadolintVersion:
+    name: "Update the label io.jenkins-infra.tools.hadolint.version in the test harness"
+    sourceID: getHadolintVersion
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[1].value"
+    scm:
+      github:
+        user: "{{ .github.user }}"
+        email: "{{ .github.email }}"
+        owner: "{{ .github.owner }}"
+        repository: "{{ .github.repository }}"
+        token: "{{ requiredEnv .github.token }}"
+        username: "{{ .github.username }}"
+        branch: "{{ .github.branch }}"
+  updateDockerfileArgHadolintVersion:
+    name: "Update the value of ARG HADOLINT_VERSION in the Dockerfile"
+    sourceID: getHadolintVersion
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "HADOLINT_VERSION"
+    scm:
+      github:
+        user: "{{ .github.user }}"
+        email: "{{ .github.email }}"
+        owner: "{{ .github.owner }}"
+        repository: "{{ .github.repository }}"
+        token: "{{ requiredEnv .github.token }}"
+        username: "{{ .github.username }}"
+        branch: "{{ .github.branch }}"
