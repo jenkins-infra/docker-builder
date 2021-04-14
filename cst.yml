@@ -66,6 +66,10 @@ fileExistenceTests:
     path: '/usr/bin/pigz'
     shouldExist: true
     isExecutableBy: 'any'
+  - name: 'JQ'
+    path: '/usr/bin/jq'
+    shouldExist: true
+    isExecutableBy: 'any'
   - name: 'subuid'
     path: '/etc/subuid'
     shouldExist: true
