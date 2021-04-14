@@ -15,7 +15,8 @@ RUN apk add --no-cache \
   git=~2 \
   make=~4 \
   # Required for img's builds
-  pigz=~2.4
+  pigz=~2.4 \
+  jq=~1
 
 ## bash need to be installed for this instruction to work as expected
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -45,6 +46,8 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
   && mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh \
   && chmod a+x /usr/local/bin/gh \
   && gh --help
+
+
 
 LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
