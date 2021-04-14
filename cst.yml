@@ -1,6 +1,4 @@
----
 schemaVersion: 2.0.0
-
 metadataTest:
   env:
     - key: "USER"
@@ -13,7 +11,7 @@ metadataTest:
     - key: io.jenkins-infra.tools
       value: "img,container-structure-test,git,make,hadolint,gh"
     - key: io.jenkins-infra.tools.hadolint.version
-      value: "1.19.0"
+      value: "2.1.0"
     - key: io.jenkins-infra.tools.container-structure-test.version
       value: "1.10.0"
     - key: io.jenkins-infra.tools.img.version
@@ -23,7 +21,6 @@ metadataTest:
   entrypoint: []
   cmd: ["/bin/bash"]
   workdir: "/app"
-
 fileExistenceTests:
   - name: 'Google Container Test CLI'
     path: '/usr/local/bin/container-structure-test'
@@ -81,7 +78,6 @@ fileExistenceTests:
   - name: 'homedir of the user infra'
     path: '/home/infra'
     shouldExist: true
-
 fileContentTests:
   - name: 'user infra exists'
     path: '/etc/passwd'
