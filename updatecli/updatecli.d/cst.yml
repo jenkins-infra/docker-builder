@@ -17,6 +17,7 @@ conditions:
   testDockerfileArgCstVersion:
     name: "Does the Dockerfile have an ARG instruction which key is CST_VERSION?"
     kind: dockerfile
+    disablesourceinput: true
     spec:
       file: Dockerfile
       instruction:
@@ -25,6 +26,7 @@ conditions:
   testCstCstVersion:
     name: "Does the test harness checks for a label label io.jenkins-infra.tools.container-structure-test.version?"
     kind: yaml
+    disablesourceinput: true
     spec:
       file: "cst.yml"
       key: "metadataTest.labels[2].key"
