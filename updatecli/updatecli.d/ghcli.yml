@@ -17,6 +17,7 @@ conditions:
   testDockerfileArgGhcliVersion:
     name: "Does the Dockerfile have an ARG instruction which key is GH_VERSION?"
     kind: dockerfile
+    disablesourceinput: true
     spec:
       file: Dockerfile
       instruction:
@@ -25,6 +26,7 @@ conditions:
   testGhcliGhcliVersion:
     name: "Does the test harness checks for a label label io.jenkins-infra.tools.gh.version?"
     kind: yaml
+    disablesourceinput: true
     spec:
       file: "cst.yml"
       key: "metadataTest.labels[4].key"
