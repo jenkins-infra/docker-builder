@@ -1,1 +1,3 @@
-parallelDockerUpdatecli([imageName: 'builder'])
+buildDockerAndPublishImage('builder', [
+  builderImage: 'dduportal/jenkinsciinfra-builder:1.0.1',
+])
