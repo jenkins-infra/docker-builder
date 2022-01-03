@@ -2,14 +2,14 @@ schemaVersion: 2.0.0
 metadataTest:
   env:
     - key: "USER"
-      value: "infra"
+      value: "jenkins"
     - key: "HOME"
-      value: "/home/infra"
+      value: "/home/jenkins"
     - key: "XDG_RUNTIME_DIR"
-      value: "/run/infra/1000"
+      value: "/run/jenkins/1000"
   labels:
     - key: io.jenkins-infra.tools
-      value: "img,container-structure-test,git,make,hadolint,gh"
+      value: "img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent"
     - key: io.jenkins-infra.tools.hadolint.version
       value: "2.8.0"
     - key: io.jenkins-infra.tools.container-structure-test.version
@@ -18,9 +18,15 @@ metadataTest:
       value: "0.5.11"
     - key: io.jenkins-infra.tools.gh.version
       value: "2.4.0"
-  entrypoint: []
-  cmd: ["/bin/bash"]
-  workdir: "/app"
+    - key: io.jenkins-infra.tools.blobxfer.version
+      value: "1.11.0"
+    - key: io.jenkins-infra.tools.jx-release-version.version
+      value: "2.5.1"
+    - key: io.jenkins-infra.tools.jenkins-agent.version
+      value: "4.11.2-2"
+  entrypoint: ["/usr/local/bin/jenkins-agent"]
+  cmd: []
+  workdir: "/home/jenkins"
 fileExistenceTests:
   - name: 'Google Container Test CLI'
     path: '/usr/local/bin/container-structure-test'
@@ -76,22 +82,22 @@ fileExistenceTests:
   - name: 'subgid'
     path: '/etc/subgid'
     shouldExist: true
-  - name: 'temp directory for user infra'
-    path: '/run/infra/1000'
+  - name: 'temp directory for user jenkins'
+    path: '/run/jenkins/1000'
     shouldExist: true
-  - name: 'homedir of the user infra'
-    path: '/home/infra'
+  - name: 'homedir of the user jenkins'
+    path: '/home/jenkins'
     shouldExist: true
 fileContentTests:
-  - name: 'user infra exists'
+  - name: 'user jenkins exists'
     path: '/etc/passwd'
-    expectedContents: ['.*infra:x:1000:1000.*']
-  - name: 'subuid contains user infra with expected subordinate UIDs/GIDs'
+    expectedContents: ['.*jenkins:x:1000:1000.*']
+  - name: 'subuid contains user jenkins with expected subordinate UIDs/GIDs'
     path: '/etc/subuid'
-    expectedContents: ['.*infra:100000:65536.*']
-  - name: 'subgid contains user infra with expected subordinate UIDs/GIDs'
+    expectedContents: ['.*jenkins:100000:65536.*']
+  - name: 'subgid contains user jenkins with expected subordinate UIDs/GIDs'
     path: '/etc/subgid'
-    expectedContents: ['.*infra:100000:65536.*']
+    expectedContents: ['.*jenkins:100000:65536.*']
   - name: 'Base OS is the expected distribution and versions'
     path: '/etc/os-release'
-    expectedContents: ['PRETTY_NAME="Alpine Linux v3.13"']
+    expectedContents: ['PRETTY_NAME="Alpine Linux v3.15"']
