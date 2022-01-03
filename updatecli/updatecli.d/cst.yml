@@ -23,12 +23,10 @@ sources:
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionFilter:
-        kind: latest
-    transformers:
-      - trimPrefix: "v"
+        kind: semver
 
 conditions:
-  testDockerfileArgCstVersion:
+  testDockerfile:
     name: "Does the Dockerfile have an ARG instruction which key is CST_VERSION?"
     kind: dockerfile
     disablesourceinput: true
@@ -37,7 +35,7 @@ conditions:
       instruction:
         keyword: "ARG"
         matcher: "CST_VERSION"
-  testCstCstVersion:
+  testTestHarness:
     name: "Does the test harness checks for a label label io.jenkins-infra.tools.container-structure-test.version?"
     kind: yaml
     disablesourceinput: true
