@@ -51,7 +51,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[6].value"
+      key: "metadataTest.labels[7].value"
     scmID: default
   updateDockerfileVersion:
     name: "Update the value of ARG JENKINS_AGENT_VERSION in the Dockerfile"
