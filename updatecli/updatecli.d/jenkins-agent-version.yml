@@ -1,5 +1,5 @@
 ---
-title: "Bump ghcli version"
+title: "Bump jenkins-agent version"
 
 scms:
   default:
@@ -14,54 +14,54 @@ scms:
       branch: "{{ .github.branch }}"
 
 sources:
-  getGhcliVersion:
+  lastVersion:
     kind: githubRelease
-    name: Get the latest Ghcli version
+    name: Get the latest jenkins-agent version
     spec:
-      owner: "cli"
-      repository: "cli"
+      owner: "jenkinsci"
+      repository: "docker-inbound-agent"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionFilter:
-        kind: semver
+        kind: latest
 
 conditions:
-  testDockerfileArgGhcliVersion:
-    name: "Does the Dockerfile have an ARG instruction which key is GH_VERSION?"
+  testDockerfile:
+    name: "Does the Dockerfile have an ARG instruction which key is JENKINS_AGENT_VERSION?"
     kind: dockerfile
     disablesourceinput: true
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "GH_VERSION"
-  testGhcliGhcliVersion:
-    name: "Does the test harness checks for a label label io.jenkins-infra.tools.gh.version?"
+        matcher: "JENKINS_AGENT_VERSION"
+  testTestHarness:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.jenkins-agent.version?"
     kind: yaml
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].key"
-      value: io.jenkins-infra.tools.gh.version
+      key: "metadataTest.labels[7].key"
+      value: io.jenkins-infra.tools.jenkins-agent.version
 
 targets:
   updateTestVersion:
-    name: "Update the label io.jenkins-infra.tools.gh.version in the test harness"
-    sourceID: getGhcliVersion
+    name: "Update the test harness"
+    sourceID: lastVersion
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].value"
+      key: "metadataTest.labels[6].value"
     scmID: default
   updateDockerfileVersion:
-    name: "Update the value of ARG GH_VERSION in the Dockerfile"
-    sourceID: getGhcliVersion
+    name: "Update the value of ARG JENKINS_AGENT_VERSION in the Dockerfile"
+    sourceID: lastVersion
     kind: dockerfile
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "GH_VERSION"
+        matcher: "JENKINS_AGENT_VERSION"
     scmID: default
 
 pullrequests:

@@ -1,9 +1,9 @@
 # The official img's image is required to retrieve the img and new*idmap binaries
 ARG IMG_VERSION=0.5.11
-ARG JXRELEASEVERSION=2.5.1
+ARG JX_RELEASE_VERSION=2.5.1
 ARG JENKINS_AGENT_VERSION=4.11.2-2
 
-FROM ghcr.io/jenkins-x/jx-release-version:${JXRELEASEVERSION} AS jx-release-version
+FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-version
 FROM r.j3ss.co/img:v${IMG_VERSION} AS img
 
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
@@ -75,7 +75,7 @@ COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-v
 ## Repeating the ARGs from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
 ARG IMG_VERSION=0.5.11
-ARG JXRELEASEVERSION=2.5.1
+ARG JX_RELEASE_VERSION=2.5.1
 ARG JENKINS_AGENT_VERSION=4.11.2-2
 
 LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent"
@@ -84,7 +84,7 @@ LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
-LABEL io.jenkins-infra.tools.jx-release-version.version="${JXRELEASEVERSION}"
+LABEL io.jenkins-infra.tools.jx-release-version.version="${JX_RELEASE_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
 
 ARG USER=jenkins

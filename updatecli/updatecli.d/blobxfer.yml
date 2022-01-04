@@ -1,5 +1,5 @@
 ---
-title: "Bump ghcli version"
+title: "Bump blobxfer version"
 
 scms:
   default:
@@ -14,54 +14,54 @@ scms:
       branch: "{{ .github.branch }}"
 
 sources:
-  getGhcliVersion:
+  lastVersion:
     kind: githubRelease
-    name: Get the latest Ghcli version
+    name: Get the latest blobxfer version
     spec:
-      owner: "cli"
-      repository: "cli"
+      owner: "Azure"
+      repository: "blobxfer"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionFilter:
         kind: semver
 
 conditions:
-  testDockerfileArgGhcliVersion:
-    name: "Does the Dockerfile have an ARG instruction which key is GH_VERSION?"
+  testDockerfile:
+    name: "Does the Dockerfile have an ARG instruction which key is BLOBXFER_VERSION?"
     kind: dockerfile
     disablesourceinput: true
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "GH_VERSION"
-  testGhcliGhcliVersion:
-    name: "Does the test harness checks for a label label io.jenkins-infra.tools.gh.version?"
+        matcher: "BLOBXFER_VERSION"
+  testTestHarness:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.blobxfer.version?"
     kind: yaml
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].key"
-      value: io.jenkins-infra.tools.gh.version
+      key: "metadataTest.labels[5].key"
+      value: io.jenkins-infra.tools.blobxfer.version
 
 targets:
   updateTestVersion:
-    name: "Update the label io.jenkins-infra.tools.gh.version in the test harness"
-    sourceID: getGhcliVersion
+    name: "Update the test harness"
+    sourceID: lastVersion
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].value"
+      key: "metadataTest.labels[5].value"
     scmID: default
   updateDockerfileVersion:
-    name: "Update the value of ARG GH_VERSION in the Dockerfile"
-    sourceID: getGhcliVersion
+    name: "Update the value of ARG BLOBXFER_VERSION in the Dockerfile"
+    sourceID: lastVersion
     kind: dockerfile
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "GH_VERSION"
+        matcher: "BLOBXFER_VERSION"
     scmID: default
 
 pullrequests:

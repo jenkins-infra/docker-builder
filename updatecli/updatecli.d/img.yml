@@ -1,5 +1,18 @@
 ---
 title: "Bump img version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
 sources:
   getImgVersion:
     kind: githubRelease
@@ -10,9 +23,8 @@ sources:
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionFilter:
-        kind: latest
-    transformers:
-      - trimPrefix: "v"
+        kind: semver
+
 conditions:
   testDockerfileArgImgVersion:
     name: "Does the Dockerfile have an ARG instruction which key is IMG_VERSION?"
@@ -31,24 +43,17 @@ conditions:
       file: "cst.yml"
       key: "metadataTest.labels[3].key"
       value: io.jenkins-infra.tools.img.version
+
 targets:
-  updateCstImgVersion:
+  updateTestVersion:
     name: "Update the label io.jenkins-infra.tools.img.version in the test harness"
     sourceID: getImgVersion
     kind: yaml
     spec:
       file: "cst.yml"
       key: "metadataTest.labels[3].value"
-    scm:
-      github:
-        user: "{{ .github.user }}"
-        email: "{{ .github.email }}"
-        owner: "{{ .github.owner }}"
-        repository: "{{ .github.repository }}"
-        token: "{{ requiredEnv .github.token }}"
-        username: "{{ .github.username }}"
-        branch: "{{ .github.branch }}"
-  updateDockerfileArgImgVersion:
+    scmID: default
+  updateDockerfileVersion:
     name: "Update the value of ARG IMG_VERSION in the Dockerfile"
     sourceID: getImgVersion
     kind: dockerfile
@@ -57,12 +62,15 @@ targets:
       instruction:
         keyword: "ARG"
         matcher: "IMG_VERSION"
-    scm:
-      github:
-        user: "{{ .github.user }}"
-        email: "{{ .github.email }}"
-        owner: "{{ .github.owner }}"
-        repository: "{{ .github.repository }}"
-        token: "{{ requiredEnv .github.token }}"
-        username: "{{ .github.username }}"
-        branch: "{{ .github.branch }}"
+    scmID: default
+
+pullrequests:
+  default:
+    kind: github
+    scmID: default
+    targets:
+      - updateDockerfileVersion
+      - updateTestVersion
+    spec:
+      labels:
+        - dependencies
