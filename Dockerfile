@@ -2,6 +2,7 @@
 ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.1
 ARG JENKINS_AGENT_VERSION=4.11.2-2
+ARG ASDF_VERSION=0.8.1
 
 FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-version
 FROM r.j3ss.co/img:v${IMG_VERSION} AS img
@@ -22,9 +23,11 @@ RUN apk add --no-cache \
   # Required for img's builds
   pigz=~2.6 \
   jq=~1 \
-  # node.js sites, e.g. pluginsite
-  nodejs=~16 \
-  npm=~8
+  gcompat=~1
+
+# Stuff to be able to install ruby
+# hadolint ignore=DL3018
+RUN apk add --no-cache gcc zlib-dev openssl-dev gdbm-dev readline-dev libffi-dev coreutils yaml-dev linux-headers autoconf
 
 # plugin site
 ARG BLOBXFER_VERSION=1.11.0
@@ -40,7 +43,6 @@ RUN apk add --no-cache \
       gcc \
       python3-dev \
   && pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" \
-  && apk del build-dependencies \
   && blobxfer --version
 
 ARG CST_VERSION=1.11.0
@@ -77,6 +79,7 @@ COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-v
 ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.1
 ARG JENKINS_AGENT_VERSION=4.11.2-2
+ARG ASDF_VERSION=0.8.1
 
 LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
@@ -98,7 +101,20 @@ COPY --from=img /usr/bin/img /usr/bin/img
 COPY --from=img /usr/bin/newuidmap /usr/bin/newuidmap
 COPY --from=img /usr/bin/newgidmap /usr/bin/newgidmap
 
+# Jenkins.io specifically needs 1.17.3 and multiple versions can be installed
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod a+x /usr/local/bin/entrypoint.sh
+
 USER "${USER}"
 ENV USER=${USER}
 ENV HOME=/home/"${USER}"
-ENTRYPOINT ["/usr/local/bin/jenkins-agent"]
+
+RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
+      echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
+      . $HOME/.asdf/asdf.sh && \
+      asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
+      asdf install ruby 2.6.9 && \
+      asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
+      asdf install nodejs 16.13.1"
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
