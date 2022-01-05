@@ -25,14 +25,22 @@ RUN apk add --no-cache \
   jq=~1 \
   gcompat=~1
 
-# Stuff to be able to install ruby
-# hadolint ignore=DL3018
-RUN apk add --no-cache gcc zlib-dev openssl-dev gdbm-dev readline-dev libffi-dev coreutils yaml-dev linux-headers autoconf
-
-# plugin site
+# plugin site / jenkins.io
 ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
+      # begin ruby deps
+      gcc \
+      zlib-dev \
+      openssl-dev \
+      gdbm-dev \
+      readline-dev \
+      libffi-dev \
+      coreutils \
+      yaml-dev \
+      linux-headers \
+      autoconf \
+      # end ruby deps
       python3 \
       py3-cryptography \
       py3-pip \
@@ -115,6 +123,8 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
       asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
       asdf install ruby 2.6.9 && \
       asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-      asdf install nodejs 16.13.1"
+      asdf install nodejs 16.13.1 && \
+      asdf plugin-add yarn && \
+      asdf install yarn 1.22.17"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
