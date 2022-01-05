@@ -44,6 +44,9 @@ RUN apk add --no-cache \
       python3 \
       py3-cryptography \
       py3-pip \
+      tar \
+      gpg-agent \
+      gpg \
     && apk add --no-cache --virtual build-dependencies \
       build-base \
       libffi-dev \
@@ -124,7 +127,7 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
       asdf install ruby 2.6.9 && \
       asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
       asdf install nodejs 16.13.1 && \
-      asdf plugin-add yarn && \
+      asdf plugin add yarn https://github.com/twuni/asdf-yarn.git && \
       asdf install yarn 1.22.17"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
