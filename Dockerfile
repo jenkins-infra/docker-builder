@@ -24,6 +24,8 @@ RUN \
   # Required for img's builds
   pigz=2.6-1 \
   jq=1.6-2.1 \
+  # jenkins.io archives stuff
+  zip=3.0-12 \
   # python
   python3=3.9.2-3 \
   python3-pip=20.3.4-4 \
