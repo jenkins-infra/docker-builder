@@ -106,7 +106,6 @@ COPY --from=img /usr/bin/img /usr/bin/img
 COPY --from=img /usr/bin/newuidmap /usr/bin/newuidmap
 COPY --from=img /usr/bin/newgidmap /usr/bin/newgidmap
 
-# Jenkins.io specifically needs 1.17.3 and multiple versions can be installed
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod a+x /usr/local/bin/entrypoint.sh
 
