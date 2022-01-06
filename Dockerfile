@@ -8,53 +8,46 @@ FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-ve
 FROM r.j3ss.co/img:v${IMG_VERSION} AS img
 
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
-FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-alpine-jdk11
+FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
-RUN apk add --no-cache \
-  # Recommended (even though not strictly required) for jenkins agents
-  bash=~5 \
+RUN \
+  apt-get -y update && \
+  LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   # Used to download binaries (implies the package "ca-certificates" as a dependency)
-  curl=~7 \
+  curl=7.74.0-1.3+deb11u1 \
   # Dev. Tooling packages (e.g. tools provided by this image installable through Alpine Linux Packages)
-  git=~2 \
-  make=~4 \
+  git=1:2.30.2-1 \
+  make=4.3-4.1 \
+  build-essential=12.9 \
   # Required for img's builds
-  pigz=~2.6 \
-  jq=~1 \
-  gcompat=~1
+  pigz=2.6-1 \
+  jq=1.6-2.1 \
+  # python
+  python3=3.9.2-3 \
+  python3-pip=20.3.4-4 \
+  # building
+  gcc=4:10.2.1-1 \
+  g++=4:10.2.1-1 \
+  zlib1g-dev=1:1.2.11.dfsg-2 \
+  libssl-dev=1.1.1k-1+deb11u1 \
+  libreadline-dev=8.1-1 \
+  zlib1g-dev=1:1.2.11.dfsg-2 \
+  build-essential=12.9 \
+  libyaml-dev=0.2.2-1 \
+  libreadline-dev=8.1-1 \
+  libncurses5-dev=6.2+20201114-2 \
+  libffi-dev=3.3-6 \
+  libgdbm-dev=1.19-2 \
+  && \
+  apt-get clean &&\
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# plugin site / jenkins.io
+# plugin site
 ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
-RUN apk add --no-cache \
-      # begin ruby deps
-      gcc \
-      zlib-dev \
-      openssl-dev \
-      gdbm-dev \
-      readline-dev \
-      libffi-dev \
-      coreutils \
-      yaml-dev \
-      linux-headers \
-      autoconf \
-      # end ruby deps
-      python3 \
-      py3-cryptography \
-      py3-pip \
-      tar \
-      gpg-agent \
-      gpg \
-    && apk add --no-cache --virtual build-dependencies \
-      build-base \
-      libffi-dev \
-      libressl-dev \
-      gcc \
-      python3-dev \
-  && pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" \
-  && blobxfer --version
+RUN pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" && blobxfer --version
 
 ARG CST_VERSION=1.11.0
 # ARG CST_SHASUM_256="72deeea26c990274725a325cf14acd20b8404251c4fcfc4d34b7527aac6c28bc"
@@ -83,7 +76,6 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
   && gh --help
 
 COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-version
-
 
 ## Repeating the ARGs from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
@@ -122,12 +114,11 @@ ENV HOME=/home/"${USER}"
 
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
       echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
+      printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
       . $HOME/.asdf/asdf.sh && \
       asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
       asdf install ruby 2.6.9 && \
       asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-      asdf install nodejs 16.13.1 && \
-      asdf plugin add yarn https://github.com/twuni/asdf-yarn.git && \
-      asdf install yarn 1.22.17"
+      asdf install nodejs 16.13.1"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
