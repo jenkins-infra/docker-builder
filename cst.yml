@@ -108,4 +108,4 @@ fileContentTests:
     expectedContents: [".*jenkins:100000:65536.*"]
   - name: "Base OS is the expected distribution and versions"
     path: "/etc/os-release"
-    expectedContents: ['PRETTY_NAME="Alpine Linux v3.15"']
+    expectedContents: ['PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"']
