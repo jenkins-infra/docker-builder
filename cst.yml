@@ -9,7 +9,7 @@ metadataTest:
       value: "/run/jenkins/1000"
   labels:
     - key: io.jenkins-infra.tools
-      value: "img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent"
+      value: "img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
     - key: io.jenkins-infra.tools.hadolint.version
       value: "2.8.0"
     - key: io.jenkins-infra.tools.container-structure-test.version
@@ -24,6 +24,8 @@ metadataTest:
       value: "2.5.1"
     - key: io.jenkins-infra.tools.jenkins-agent.version
       value: "4.11.2-2"
+    - key: io.jenkins-infra.tools.netlify-deploy.version
+      value: "0.1.2"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
   cmd: []
   workdir: "/home/jenkins"
