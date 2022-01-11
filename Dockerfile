@@ -77,6 +77,16 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
   && chmod a+x /usr/local/bin/gh \
   && gh --help
 
+ARG NETLIFY_DEPLOY=0.1.2
+RUN mkdir -p /tmp/netlify && \
+  curl --silent --show-error --location --output /tmp/netlify.tar.gz \
+  "https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz" \
+  && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
+  && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
+  && chmod a+x /usr/local/bin/netlify-deploy \
+  && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
+  && netlify-deploy --help
+
 COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-version
 
 ## Repeating the ARGs from top level to allow them on this scope
@@ -86,7 +96,7 @@ ARG JX_RELEASE_VERSION=2.5.1
 ARG JENKINS_AGENT_VERSION=4.11.2-2
 ARG ASDF_VERSION=0.8.1
 
-LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent"
+LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
 LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
@@ -94,6 +104,7 @@ LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jx-release-version.version="${JX_RELEASE_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
+LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000

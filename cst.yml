@@ -24,6 +24,8 @@ metadataTest:
       value: "2.5.1"
     - key: io.jenkins-infra.tools.jenkins-agent.version
       value: "4.11.2-2"
+    - key: io.jenkins-infra.tools.netlify-deploy.version
+      value: "0.1.2"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
   cmd: []
   workdir: "/home/jenkins"
