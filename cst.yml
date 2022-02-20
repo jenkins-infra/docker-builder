@@ -17,7 +17,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.img.version
       value: "0.5.11"
     - key: io.jenkins-infra.tools.gh.version
-      value: "2.4.0"
+      value: "2.5.1"
     - key: io.jenkins-infra.tools.blobxfer.version
       value: "1.11.0"
     - key: io.jenkins-infra.tools.jx-release-version.version
