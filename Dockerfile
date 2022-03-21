@@ -1,7 +1,7 @@
 # The official img's image is required to retrieve the img and new*idmap binaries
 ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.1
-ARG JENKINS_AGENT_VERSION=4.11.2-4
+ARG JENKINS_AGENT_VERSION=4.13-1
 ARG ASDF_VERSION=0.8.1
 
 FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-version
@@ -59,7 +59,7 @@ RUN curl --silent --show-error --location --output /usr/local/bin/container-stru
   && chmod a+x /usr/local/bin/container-structure-test \
   && container-structure-test version
 
-ARG HADOLINT_VERSION=2.8.0
+ARG HADOLINT_VERSION=2.9.1
 # ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
 RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
     "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
@@ -93,7 +93,7 @@ COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-v
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
 ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.1
-ARG JENKINS_AGENT_VERSION=4.11.2-4
+ARG JENKINS_AGENT_VERSION=4.13-1
 ARG ASDF_VERSION=0.8.1
 
 LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"

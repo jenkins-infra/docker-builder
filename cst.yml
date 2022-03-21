@@ -11,7 +11,7 @@ metadataTest:
     - key: io.jenkins-infra.tools
       value: "img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
     - key: io.jenkins-infra.tools.hadolint.version
-      value: "2.8.0"
+      value: "2.9.1"
     - key: io.jenkins-infra.tools.container-structure-test.version
       value: "1.11.0"
     - key: io.jenkins-infra.tools.img.version
@@ -23,7 +23,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.jx-release-version.version
       value: "2.5.1"
     - key: io.jenkins-infra.tools.jenkins-agent.version
-      value: "4.11.2-4"
+      value: "4.13-1"
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: "0.1.4"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
