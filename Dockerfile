@@ -67,7 +67,7 @@ RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
   && chmod a+x /usr/local/bin/hadolint \
   && hadolint -v
 
-ARG GH_VERSION=2.6.0
+ARG GH_VERSION=2.7.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
