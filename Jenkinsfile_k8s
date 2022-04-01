@@ -1,1 +1,4 @@
-parallelDockerUpdatecli([imageName: 'builder'])
+parallelDockerUpdatecli([
+  imageName: 'builder',
+  useContainer: false,
+ ])
