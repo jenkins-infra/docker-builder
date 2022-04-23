@@ -23,7 +23,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.jx-release-version.version
       value: "2.5.1"
     - key: io.jenkins-infra.tools.jenkins-agent.version
-      value: "4.13-1"
+      value: "4.13-2"
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: "0.1.4"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
