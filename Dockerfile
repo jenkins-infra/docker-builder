@@ -1,6 +1,6 @@
 # The official img's image is required to retrieve the img and new*idmap binaries
 ARG IMG_VERSION=0.5.11
-ARG JX_RELEASE_VERSION=2.5.1
+ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
@@ -85,7 +85,7 @@ COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-v
 ## Repeating the ARGs from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
 ARG IMG_VERSION=0.5.11
-ARG JX_RELEASE_VERSION=2.5.1
+ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
