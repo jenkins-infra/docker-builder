@@ -9,13 +9,11 @@ metadataTest:
       value: "/run/jenkins/1000"
   labels:
     - key: io.jenkins-infra.tools
-      value: "img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
+      value: "container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
     - key: io.jenkins-infra.tools.hadolint.version
       value: "2.10.0"
     - key: io.jenkins-infra.tools.container-structure-test.version
       value: "1.11.0"
-    - key: io.jenkins-infra.tools.img.version
-      value: "0.5.11"
     - key: io.jenkins-infra.tools.gh.version
       value: "2.11.3"
     - key: io.jenkins-infra.tools.blobxfer.version
@@ -42,20 +40,8 @@ fileExistenceTests:
     path: "/usr/local/bin/hadolint"
     shouldExist: true
     isExecutableBy: "any"
-  - name: "img"
-    path: "/usr/bin/img"
-    shouldExist: true
-    isExecutableBy: "any"
   - name: "gh"
     path: "/usr/local/bin/gh"
-    shouldExist: true
-    isExecutableBy: "any"
-  - name: "img newuidmap"
-    path: "/usr/bin/newuidmap"
-    shouldExist: true
-    isExecutableBy: "any"
-  - name: "img newgidmap"
-    path: "/usr/bin/newgidmap"
     shouldExist: true
     isExecutableBy: "any"
   - name: "Bash"
@@ -72,10 +58,6 @@ fileExistenceTests:
     isExecutableBy: "any"
   - name: "Git"
     path: "/usr/bin/git"
-    shouldExist: true
-    isExecutableBy: "any"
-  - name: "Pigz"
-    path: "/usr/bin/pigz"
     shouldExist: true
     isExecutableBy: "any"
   - name: "JQ"

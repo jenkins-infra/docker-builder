@@ -1,11 +1,8 @@
-# The official img's image is required to retrieve the img and new*idmap binaries
-ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
 FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-version
-FROM r.j3ss.co/img:v${IMG_VERSION} AS img
 
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
@@ -23,8 +20,6 @@ RUN \
   git \
   make \
   build-essential \
-  # Required for img's builds
-  pigz \
   jq \
   # jenkins.io archives stuff
   zip \
@@ -84,14 +79,12 @@ COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-v
 
 ## Repeating the ARGs from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG IMG_VERSION=0.5.11
 ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
-LABEL io.jenkins-infra.tools="img,container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
+LABEL io.jenkins-infra.tools="container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
-LABEL io.jenkins-infra.tools.img.version="${IMG_VERSION}"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
@@ -105,10 +98,6 @@ ENV XDG_RUNTIME_DIR=/run/${USER}/1000
 RUN mkdir -p "${XDG_RUNTIME_DIR}" \
   && chown -R "${USER}" "${XDG_RUNTIME_DIR}" \
   && echo "${USER}":100000:65536 | tee /etc/subuid | tee /etc/subgid
-
-COPY --from=img /usr/bin/img /usr/bin/img
-COPY --from=img /usr/bin/newuidmap /usr/bin/newuidmap
-COPY --from=img /usr/bin/newgidmap /usr/bin/newgidmap
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod a+x /usr/local/bin/entrypoint.sh
