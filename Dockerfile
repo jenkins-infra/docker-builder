@@ -56,11 +56,6 @@ RUN mkdir -p /tmp/netlify && \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
 
-## Repeating the ARGs from top level to allow them on this scope
-# Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_AGENT_VERSION=4.13-2
-ARG ASDF_VERSION=0.8.1
-
 LABEL io.jenkins-infra.tools="git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
