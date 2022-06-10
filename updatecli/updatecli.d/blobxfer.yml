@@ -41,7 +41,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[5].key"
+      key: "metadataTest.labels[4].key"
       value: io.jenkins-infra.tools.blobxfer.version
 
 targets:
@@ -51,7 +51,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[5].value"
+      key: "metadataTest.labels[4].value"
     scmID: default
   updateDockerfileVersion:
     name: "Update the value of ARG BLOBXFER_VERSION in the Dockerfile"
