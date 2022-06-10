@@ -3,10 +3,11 @@ name: Release Drafter
 
 on:
   workflow_dispatch:
-  release:
   push:
-    branches:
-      - main
+  release:
+
+# Only allow 1 release-drafter build at a time to avoid creating multiple "next" releases
+concurrency: "release-drafter"
 
 jobs:
   update_release_draft:
