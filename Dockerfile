@@ -47,14 +47,6 @@ RUN curl --silent --show-error --location --output /usr/local/bin/container-stru
   && chmod a+x /usr/local/bin/container-structure-test \
   && container-structure-test version
 
-ARG HADOLINT_VERSION=2.10.0
-# ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
-RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
-  "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
-  # && sha256sum /usr/local/bin/hadolint | grep -q "${HADOLINT_SHASUM_256}" \
-  && chmod a+x /usr/local/bin/hadolint \
-  && hadolint -v
-
 ARG GH_VERSION=2.11.3
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
@@ -83,10 +75,9 @@ ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
-LABEL io.jenkins-infra.tools="container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
+LABEL io.jenkins-infra.tools="container-structure-test,git,make,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
-LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jx-release-version.version="${JX_RELEASE_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
