@@ -9,13 +9,11 @@ metadataTest:
       value: "/run/jenkins/1000"
   labels:
     - key: io.jenkins-infra.tools
-      value: "git,make,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
+      value: "git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
     - key: io.jenkins-infra.tools.gh.version
       value: "2.12.1"
     - key: io.jenkins-infra.tools.blobxfer.version
       value: "1.11.0"
-    - key: io.jenkins-infra.tools.jx-release-version.version
-      value: "2.5.2"
     - key: io.jenkins-infra.tools.jenkins-agent.version
       value: "4.13-2"
     - key: io.jenkins-infra.tools.netlify-deploy.version
