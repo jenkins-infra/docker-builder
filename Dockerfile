@@ -1,8 +1,12 @@
+ARG JENKINS_AGENT_VERSION=4.13-2
+
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
+## Repeating the ARG from top level to allow them on this scope
+# Ref - https://docs.docker.com/engine/reference/builder/#scope
 ARG JENKINS_AGENT_VERSION=4.13-2
 ARG ASDF_VERSION=0.8.1
 
