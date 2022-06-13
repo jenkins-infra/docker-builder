@@ -1,10 +1,10 @@
-ARG JENKINS_AGENT_VERSION=4.13-2
-ARG ASDF_VERSION=0.8.1
-
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
+ARG JENKINS_AGENT_VERSION=4.13-2
+ARG ASDF_VERSION=0.8.1
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
