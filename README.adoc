@@ -1,9 +1,6 @@
-= Docker Image for Building Docker Images
+= Docker Image for Building static websites
 
-image::https://i.imgur.com/d7KZNKD.png[Inception,width=200]
-
-This repository hosts the resources to build a Docker Image
-used for... building Docker Images.
+This repository hosts the resources to build a Docker Image used to build static websites like https://plugins.jenkins.io
 
 Its target is to allow building https://github.com/opencontainers/image-spec[OCI compliant images] in rootless or daemonless contexts as Kubernetes non privileged pods.
 

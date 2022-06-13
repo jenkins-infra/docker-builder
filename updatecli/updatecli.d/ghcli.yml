@@ -41,7 +41,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[3].key"
+      key: "metadataTest.labels[1].key"
       value: io.jenkins-infra.tools.gh.version
 
 targets:
@@ -51,7 +51,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[3].value"
+      key: "metadataTest.labels[1].value"
     scmID: default
   updateDockerfileVersion:
     name: "Update the value of ARG GH_VERSION in the Dockerfile"

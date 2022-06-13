@@ -1,13 +1,14 @@
-ARG JX_RELEASE_VERSION=2.5.2
 ARG JENKINS_AGENT_VERSION=4.13-2
-ARG ASDF_VERSION=0.8.1
-
-FROM ghcr.io/jenkins-x/jx-release-version:${JX_RELEASE_VERSION} AS jx-release-version
 
 # Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
+## Repeating the ARG from top level to allow them on this scope
+# Ref - https://docs.docker.com/engine/reference/builder/#scope
+ARG JENKINS_AGENT_VERSION=4.13-2
+ARG ASDF_VERSION=0.8.1
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
@@ -39,22 +40,6 @@ ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
 RUN pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" && blobxfer --version
 
-ARG CST_VERSION=1.11.0
-# ARG CST_SHASUM_256="72deeea26c990274725a325cf14acd20b8404251c4fcfc4d34b7527aac6c28bc"
-RUN curl --silent --show-error --location --output /usr/local/bin/container-structure-test \
-  "https://storage.googleapis.com/container-structure-test/v${CST_VERSION}/container-structure-test-linux-amd64" \
-  # && sha256sum /usr/local/bin/container-structure-test | grep -q "${CST_SHASUM_256}" \
-  && chmod a+x /usr/local/bin/container-structure-test \
-  && container-structure-test version
-
-ARG HADOLINT_VERSION=2.10.0
-# ARG HADOLINT_SHASUM_256="5099a932032f0d2c708529fb7739d4b2335d0e104ed051591a41d622fe4e4cc4"
-RUN curl --silent --show-error --location --output /usr/local/bin/hadolint \
-  "https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64" \
-  # && sha256sum /usr/local/bin/hadolint | grep -q "${HADOLINT_SHASUM_256}" \
-  && chmod a+x /usr/local/bin/hadolint \
-  && hadolint -v
-
 ARG GH_VERSION=2.12.1
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
@@ -75,20 +60,9 @@ RUN mkdir -p /tmp/netlify && \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
 
-COPY --from=jx-release-version /usr/bin/jx-release-version /usr/bin/jx-release-version
-
-## Repeating the ARGs from top level to allow them on this scope
-# Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JX_RELEASE_VERSION=2.5.2
-ARG JENKINS_AGENT_VERSION=4.13-2
-ARG ASDF_VERSION=0.8.1
-
-LABEL io.jenkins-infra.tools="container-structure-test,git,make,hadolint,gh,nodejs,npm,blobxfer,jx-release-version,jenkins-agent,netlify-deploy"
-LABEL io.jenkins-infra.tools.container-structure-test.version="${CST_VERSION}"
+LABEL io.jenkins-infra.tools="git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
-LABEL io.jenkins-infra.tools.hadolint.version="${HADOLINT_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
-LABEL io.jenkins-infra.tools.jx-release-version.version="${JX_RELEASE_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
 
