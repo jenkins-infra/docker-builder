@@ -59,12 +59,21 @@ RUN mkdir -p /tmp/netlify && \
   && chmod a+x /usr/local/bin/netlify-deploy \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
+  
+## Install Azure Cli
+ARG AZ_CLI_VERSION=2.38.0
+# hadolint ignore=DL3013,DL3018
+RUN apk add --no-cache --virtual .az-build-deps gcc musl-dev python3-dev libffi-dev openssl-dev cargo make \
+  && apk add --no-cache py3-pip py3-pynacl py3-cryptography \
+  && python3 -m pip install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" \
+  && apk del .az-build-deps
 
-LABEL io.jenkins-infra.tools="git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
+LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
+LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
