@@ -9,7 +9,8 @@ metadataTest:
       value: "/run/jenkins/1000"
   labels:
     - key: io.jenkins-infra.tools
-      value: "git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
+      value: ".*git.*"
+      isRegex: true
     - key: io.jenkins-infra.tools.gh.version
       value: "2.13.0"
     - key: io.jenkins-infra.tools.blobxfer.version
@@ -44,6 +45,10 @@ fileExistenceTests:
     isExecutableBy: "any"
   - name: "Git"
     path: "/usr/bin/git"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Azure CLI"
+    path: "/usr/local/bin/az"
     shouldExist: true
     isExecutableBy: "any"
   - name: "JQ"
