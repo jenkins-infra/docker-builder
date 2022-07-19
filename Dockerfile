@@ -1,6 +1,5 @@
 ARG JENKINS_AGENT_VERSION=4.13-2
 
-# Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
@@ -27,6 +26,8 @@ RUN \
   # python
   python3 \
   python3-pip \
+  # Required for installing azure-cli through pip (the debian package is not multi-arch)
+  python3-dev \
   # Required for building Ruby
   libssl-dev libreadline-dev zlib1g-dev \
   # Required for some of the ruby gems that will be installed
@@ -63,10 +64,8 @@ RUN mkdir -p /tmp/netlify && \
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.38.0
 # hadolint ignore=DL3013,DL3018
-RUN apk add --no-cache --virtual .az-build-deps gcc musl-dev python3-dev libffi-dev openssl-dev cargo make \
-  && apk add --no-cache py3-pip py3-pynacl py3-cryptography \
-  && python3 -m pip install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" \
-  && apk del .az-build-deps
+RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" \
+ && az --version
 
 LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
