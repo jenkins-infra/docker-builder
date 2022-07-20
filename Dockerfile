@@ -1,4 +1,4 @@
-ARG JENKINS_AGENT_VERSION=4.13-2
+ARG JENKINS_AGENT_VERSION=4.13.2-1
 
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_AGENT_VERSION=4.13-2
+ARG JENKINS_AGENT_VERSION=4.13.2-1
 ARG ASDF_VERSION=0.8.1
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
