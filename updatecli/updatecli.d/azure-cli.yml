@@ -1,0 +1,80 @@
+title: "Bump azure-cli version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  getAzCliVersion:
+    kind: githubrelease
+    name: Get the latest azure-cli version
+    spec:
+      owner: "Azure"
+      repository: "azure-cli"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: regex
+        ## Latest stable x.y.z version
+        pattern: 'azure-cli-(\d*)\.(\d*)\.(\d*)$'
+    transformers:
+      - trimprefix: "azure-cli-"
+
+conditions:
+  testDockerfileArgAzCliVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is AZ_CLI_VERSION?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "AZ_CLI_VERSION"
+  testCstAzCliVersion:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.azure-cli.version?"
+    kind: yaml
+    disablesourceinput: true
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[14].key"
+      value: io.jenkins-infra.tools.azure-cli.version
+
+targets:
+  updateCstVersion:
+    name: "Update the label io.jenkins-infra.tools.azure-cli.version in the test harness"
+    sourceid: getAzCliVersion
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[14].value"
+    scmid: default
+  updateDockerfileArgVersion:
+    name: "Update the value of ARG AZ_CLI_VERSION in the Dockerfile"
+    sourceid: getAzCliVersion
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "AZ_CLI_VERSION"
+    scmid: default
+
+pullrequests:
+  default:
+    kind: github
+    scmid: default
+    targets:
+      - updateCstVersion
+      - updateDockerfileArgVersion
+    spec:
+      labels:
+        - dependencies
+        - azure-cli
