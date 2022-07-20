@@ -1,6 +1,5 @@
 ARG JENKINS_AGENT_VERSION=4.13.2-1
 
-# Alpine is used by default for fast and ligthweight customization with a fixed minor to benefit of the latest patches
 FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
@@ -27,6 +26,8 @@ RUN \
   # python
   python3 \
   python3-pip \
+  # Required for installing azure-cli through pip (the debian package is not multi-arch)
+  python3-dev \
   # Required for building Ruby
   libssl-dev libreadline-dev zlib1g-dev \
   # Required for some of the ruby gems that will be installed
@@ -59,12 +60,19 @@ RUN mkdir -p /tmp/netlify && \
   && chmod a+x /usr/local/bin/netlify-deploy \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
+  
+## Install Azure Cli
+ARG AZ_CLI_VERSION=2.38.0
+# hadolint ignore=DL3013,DL3018
+RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" \
+ && az --version
 
-LABEL io.jenkins-infra.tools="git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
+LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
+LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
@@ -80,12 +88,17 @@ USER "${USER}"
 ENV USER=${USER}
 ENV HOME=/home/"${USER}"
 
+# Install ASDF to install custom tools
+# Ruby 2 and NodeJS 16.13.1 is needed by the jenkins.io/plugins.jenkins.io websites
+# Ruby 3 is needed by some of the jenkins-infra/infra-report
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
   echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 2.6.9 && \
+  asdf install ruby 2.6.9 && \ 
+  asdf install ruby 3.0.4 && \
+  asdf global ruby 2.6.9 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 16.13.1"
 
