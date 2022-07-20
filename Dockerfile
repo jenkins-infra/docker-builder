@@ -88,12 +88,17 @@ USER "${USER}"
 ENV USER=${USER}
 ENV HOME=/home/"${USER}"
 
+# Install ASDF to install custom tools
+# Ruby 2 and NodeJS 16.13.1 is needed by the jenkins.io/plugins.jenkins.io websites
+# Ruby 3 is needed by some of the jenkins-infra/infra-report
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
   echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 2.6.9 && \
+  asdf install ruby 2.6.9 && \ 
+  asdf install ruby 3.0.4 && \
+  asdf global ruby 2.6.9 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 16.13.1"
 
