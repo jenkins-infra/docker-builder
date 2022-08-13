@@ -12,7 +12,7 @@ metadataTest:
       value: ".*git.*"
       isRegex: true
     - key: io.jenkins-infra.tools.gh.version
-      value: "2.14.3"
+      value: "2.14.4"
     - key: io.jenkins-infra.tools.blobxfer.version
       value: "1.11.0"
     - key: io.jenkins-infra.tools.jenkins-agent.version
