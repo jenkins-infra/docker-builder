@@ -16,7 +16,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.blobxfer.version
       value: "1.11.0"
     - key: io.jenkins-infra.tools.jenkins-agent.version
-      value: "3046.v38db_38a_b_7a_86-1"
+      value: "3063.v26e24490f041-2"
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: "0.1.4"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
