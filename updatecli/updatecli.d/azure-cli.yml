@@ -1,4 +1,5 @@
-title: "Bump azure-cli version"
+---
+name: Bump the `az` CLI version
 
 scms:
   default:
@@ -44,7 +45,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[14].key"
+      key: "metadataTest.labels[6].key"
       value: io.jenkins-infra.tools.azure-cli.version
 
 targets:
@@ -54,7 +55,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[14].value"
+      key: "metadataTest.labels[6].value"
     scmid: default
   updateDockerfileArgVersion:
     name: "Update the value of ARG AZ_CLI_VERSION in the Dockerfile"
@@ -71,10 +72,9 @@ pullrequests:
   default:
     kind: github
     scmid: default
-    targets:
-      - updateCstVersion
-      - updateDockerfileArgVersion
+    title: Bump the `az` CLI version to {{ source "getAzCliVersion" }}
     spec:
       labels:
         - dependencies
         - azure-cli
+        - az

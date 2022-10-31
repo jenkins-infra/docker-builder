@@ -1,0 +1,87 @@
+---
+name: Bump Jenkins Inbound Agent Version
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  lastVersion:
+    kind: githubrelease
+    name: Get the latest jenkins-inbound-agent version
+    spec:
+      owner: "jenkinsci"
+      repository: "docker-inbound-agent"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: regex
+        ## not the JDK8 version - regex from https://stackoverflow.com/questions/16398471/regex-for-string-not-ending-with-given-suffix/16398502#16398502
+        pattern: '.*[^-][^j][^d][^k][^8]$'
+
+conditions:
+  testDockerfile:
+    name: "Does the Dockerfile have an ARG instruction which key is JENKINS_INBOUND_AGENT_VERSION?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "JENKINS_INBOUND_AGENT_VERSION"
+  testTestHarness:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.jenkins-inbound-agent.version?"
+    kind: yaml
+    disablesourceinput: true
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[3].key"
+      value: io.jenkins-infra.tools.jenkins-inbound-agent.version
+  checkDockerImagePublished:
+    name: "Is latest dockerfile docker-inbound-agent image published?"
+    kind: dockerimage
+    disablesourceinput: true
+    spec:
+      image: "jenkins/inbound-agent"
+      architecture: "amd64"
+      tag: '{{ source "lastVersion" }}-alpine-jdk11'
+
+
+
+targets:
+  updateTestVersion:
+    name: "Update the test harness"
+    sourceid: lastVersion
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "metadataTest.labels[3].value"
+    scmid: default
+  updateDockerfileVersion:
+    name: "Update the value of ARG JENKINS_INBOUND_AGENT_VERSION in the Dockerfile"
+    sourceid: lastVersion
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "JENKINS_INBOUND_AGENT_VERSION"
+    scmid: default
+
+pullrequests:
+  default:
+    kind: github
+    scmid: default
+    title: Bump Jenkins Inbound Agent Version to {{ source "lastVersion" }}
+    spec:
+      labels:
+        - dependencies
+        - jenkins-inbound-agent

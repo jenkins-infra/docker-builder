@@ -1,5 +1,5 @@
 ---
-name: Bump the `blobxfer` CLI version
+name: Bump the ASDF version
 
 scms:
   default:
@@ -16,10 +16,10 @@ scms:
 sources:
   lastVersion:
     kind: githubrelease
-    name: get the latest blobxfer CLI version
+    name: Get the latest ASDF version
     spec:
-      owner: "Azure"
-      repository: "blobxfer"
+      owner: asdf-vm
+      repository: asdf
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionfilter:
@@ -28,50 +28,50 @@ sources:
       - trimprefix: v
 
 conditions:
-  testDockerfile:
-    name: "Does the Dockerfile have an ARG instruction which key is BLOBXFER_VERSION?"
+  testDockerfileArgVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is ASDF_VERSION?"
     kind: dockerfile
     disablesourceinput: true
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "BLOBXFER_VERSION"
-  testTestHarness:
-    name: "Does the test harness checks for a label io.jenkins-infra.tools.blobxfer.version?"
+        matcher: "ASDF_VERSION"
+  testCstVersion:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.asdf.version?"
     kind: yaml
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[2].key"
-      value: io.jenkins-infra.tools.blobxfer.version
+      key: "metadataTest.labels[5].key"
+      value: io.jenkins-infra.tools.asdf.version
 
 targets:
-  updateTestVersion:
-    name: "Update the test harness"
+  updateCstVersion:
+    name: "Update the label io.jenkins-infra.tools.asdf.version in the test harness"
     sourceid: lastVersion
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[2].value"
+      key: "metadataTest.labels[5].value"
     scmid: default
-  updateDockerfileVersion:
-    name: "Update the value of ARG BLOBXFER_VERSION in the Dockerfile"
+  updateDockerfileArgVersion:
+    name: "Update the value of ARG ASDF_VERSION in the Dockerfile"
     sourceid: lastVersion
     kind: dockerfile
     spec:
-      file: dockerfile
+      file: Dockerfile
       instruction:
         keyword: "ARG"
-        matcher: "BLOBXFER_VERSION"
+        matcher: "ASDF_VERSION"
     scmid: default
 
 pullrequests:
   default:
     kind: github
     scmid: default
-    title: Bump the `blobxfer` CLI version to {{ source "lastVersion" }}
+    title: Bump ASDF version to {{ source "lastVersion" }}
     spec:
       labels:
         - dependencies
-        - blobxfer
+        - asdf

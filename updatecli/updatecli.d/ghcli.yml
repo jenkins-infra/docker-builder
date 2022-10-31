@@ -1,5 +1,5 @@
 ---
-title: "Bump ghcli version"
+name: Bump `gh` CLI version
 
 scms:
   default:
@@ -15,14 +15,14 @@ scms:
 
 sources:
   getGhcliVersion:
-    kind: githubRelease
+    kind: githubrelease
     name: Get the latest Ghcli version
     spec:
       owner: "cli"
       repository: "cli"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
-      versionFilter:
+      versionfilter:
         kind: semver
     transformers:
       - trimprefix: v
@@ -49,30 +49,29 @@ conditions:
 targets:
   updateTestVersion:
     name: "Update the label io.jenkins-infra.tools.gh.version in the test harness"
-    sourceID: getGhcliVersion
+    sourceid: getGhcliVersion
     kind: yaml
     spec:
       file: "cst.yml"
       key: "metadataTest.labels[1].value"
-    scmID: default
+    scmid: default
   updateDockerfileVersion:
     name: "Update the value of ARG GH_VERSION in the Dockerfile"
-    sourceID: getGhcliVersion
+    sourceid: getGhcliVersion
     kind: dockerfile
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
         matcher: "GH_VERSION"
-    scmID: default
+    scmid: default
 
 pullrequests:
   default:
     kind: github
-    scmID: default
-    targets:
-      - updateDockerfileVersion
-      - updateTestVersion
+    scmid: default
+    title: Bump `gh` CLI version to {{ source "getGhcliVersion" }}
     spec:
       labels:
         - dependencies
+        - gh
