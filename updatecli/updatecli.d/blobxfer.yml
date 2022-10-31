@@ -60,7 +60,7 @@ targets:
     sourceid: lastVersion
     kind: dockerfile
     spec:
-      file: dockerfile
+      file: Dockerfile
       instruction:
         keyword: "ARG"
         matcher: "BLOBXFER_VERSION"
