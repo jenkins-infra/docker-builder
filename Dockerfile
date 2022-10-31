@@ -1,13 +1,12 @@
-ARG JENKINS_AGENT_VERSION=3063.v26e24490f041-2
+ARG JENKINS_INBOUND_AGENT_VERSION=3063.v26e24490f041-2
 
-FROM jenkins/inbound-agent:${JENKINS_AGENT_VERSION}-jdk11
+FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk11
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_AGENT_VERSION=3063.v26e24490f041-2
-ARG ASDF_VERSION=0.8.1
+ARG JENKINS_INBOUND_AGENT_VERSION=3063.v26e24490f041-2
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
@@ -60,19 +59,11 @@ RUN mkdir -p /tmp/netlify && \
   && chmod a+x /usr/local/bin/netlify-deploy \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
-  
+
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.38.0
 # hadolint ignore=DL3013,DL3018
-RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" \
- && az --version
-
-LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-agent,netlify-deploy"
-LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
-LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
-LABEL io.jenkins-infra.tools.jenkins-agent.version="${JENKINS_AGENT_VERSION}"
-LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
-LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
+RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" && az --version
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
@@ -91,15 +82,24 @@ ENV HOME=/home/"${USER}"
 # Install ASDF to install custom tools
 # Ruby 2 and NodeJS 16.13.1 is needed by the jenkins.io/plugins.jenkins.io websites
 # Ruby 3 is needed by some of the jenkins-infra/infra-report
+ARG ASDF_VERSION=0.8.1
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
   echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 2.6.9 && \ 
+  asdf install ruby 2.6.9 && \
   asdf install ruby 3.0.4 && \
   asdf global ruby 2.6.9 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 16.13.1"
+
+LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
+LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
+LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
+LABEL io.jenkins-infra.tools.jenkins-inbound-agent.version="${JENKINS_INBOUND_AGENT_VERSION}"
+LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
+LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
+LABEL io.jenkins-infra.tools.asdf.version="${ASDF_VERSION}"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

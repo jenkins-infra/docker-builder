@@ -1,5 +1,5 @@
 ---
-title: "Bump blobxfer version"
+name: Bump the `blobxfer` CLI version
 
 scms:
   default:
@@ -15,15 +15,17 @@ scms:
 
 sources:
   lastVersion:
-    kind: githubRelease
-    name: Get the latest blobxfer version
+    kind: githubrelease
+    name: get the latest blobxfer CLI version
     spec:
       owner: "Azure"
       repository: "blobxfer"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
-      versionFilter:
+      versionfilter:
         kind: semver
+    transformers:
+      - trimprefix: v
 
 conditions:
   testDockerfile:
@@ -47,30 +49,29 @@ conditions:
 targets:
   updateTestVersion:
     name: "Update the test harness"
-    sourceID: lastVersion
+    sourceid: lastVersion
     kind: yaml
     spec:
       file: "cst.yml"
       key: "metadataTest.labels[2].value"
-    scmID: default
+    scmid: default
   updateDockerfileVersion:
     name: "Update the value of ARG BLOBXFER_VERSION in the Dockerfile"
-    sourceID: lastVersion
+    sourceid: lastVersion
     kind: dockerfile
     spec:
       file: Dockerfile
       instruction:
         keyword: "ARG"
         matcher: "BLOBXFER_VERSION"
-    scmID: default
+    scmid: default
 
 pullrequests:
   default:
     kind: github
-    scmID: default
-    targets:
-      - updateDockerfileVersion
-      - updateTestVersion
+    scmid: default
+    title: Bump the `blobxfer` CLI version to {{ source "lastVersion" }}
     spec:
       labels:
         - dependencies
+        - blobxfer
