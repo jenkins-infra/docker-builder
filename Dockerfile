@@ -92,7 +92,8 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf install ruby 3.0.4 && \
   asdf global ruby 2.6.9 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-  asdf install nodejs 16.13.1"
+  asdf install nodejs 16.13.1 && \
+  asdf global nodejs 16.13.1"
 
 LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
