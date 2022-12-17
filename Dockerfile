@@ -88,9 +88,9 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 2.6.9 && \
+  asdf install ruby 2.7.7 && \
   asdf install ruby 3.0.4 && \
-  asdf global ruby 2.6.9 && \
+  asdf global ruby 2.7.7 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 16.13.1 && \
   asdf global nodejs 16.13.1"
