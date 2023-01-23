@@ -92,7 +92,7 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
   asdf install ruby 2.7.7 && \
-  asdf install ruby 3.0.4 && \
+  asdf install ruby 3.2.0 && \
   asdf global ruby 2.7.7 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 18.13.0 && \
