@@ -20,7 +20,7 @@ metadataTest:
         - key: io.jenkins-infra.tools.netlify-deploy.version
           value: "0.1.5"
         - key: io.jenkins-infra.tools.asdf.version
-          value: "0.11.1"
+          value: "0.11.2"
         - key: io.jenkins-infra.tools.azure-cli.version
           value: "2.45.0"
     entrypoint: ["/usr/local/bin/entrypoint.sh"]
