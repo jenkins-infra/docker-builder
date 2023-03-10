@@ -1,90 +1,90 @@
 schemaVersion: 2.0.0
 metadataTest:
-    envVars:
-        - key: "USER"
-          value: "jenkins"
-        - key: "HOME"
-          value: "/home/jenkins"
-        - key: "XDG_RUNTIME_DIR"
-          value: "/run/jenkins/1000"
-    labels:
-        - key: io.jenkins-infra.tools
-          value: ".*git.*"
-          isRegex: true
-        - key: io.jenkins-infra.tools.gh.version
-          value: "2.23.0"
-        - key: io.jenkins-infra.tools.blobxfer.version
-          value: "1.11.0"
-        - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
-          value: "3107.v665000b_51092-4"
-        - key: io.jenkins-infra.tools.netlify-deploy.version
-          value: "0.1.8"
-        - key: io.jenkins-infra.tools.asdf.version
-          value: "0.11.2"
-        - key: io.jenkins-infra.tools.azure-cli.version
-          value: "2.45.0"
-    entrypoint: ["/usr/local/bin/entrypoint.sh"]
-    cmd: []
-    workdir: "/home/jenkins"
+  envVars:
+    - key: "USER"
+      value: "jenkins"
+    - key: "HOME"
+      value: "/home/jenkins"
+    - key: "XDG_RUNTIME_DIR"
+      value: "/run/jenkins/1000"
+  labels:
+    - key: io.jenkins-infra.tools
+      value: ".*git.*"
+      isRegex: true
+    - key: io.jenkins-infra.tools.gh.version
+      value: "2.23.0"
+    - key: io.jenkins-infra.tools.blobxfer.version
+      value: "1.11.0"
+    - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
+      value: "3107.v665000b_51092-4"
+    - key: io.jenkins-infra.tools.netlify-deploy.version
+      value: "0.1.8"
+    - key: io.jenkins-infra.tools.asdf.version
+      value: "0.11.2"
+    - key: io.jenkins-infra.tools.azure-cli.version
+      value: "2.46.0"
+  entrypoint: ["/usr/local/bin/entrypoint.sh"]
+  cmd: []
+  workdir: "/home/jenkins"
 fileExistenceTests:
-    - name: "entrypoint"
-      path: "/usr/local/bin/entrypoint.sh"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "gh"
-      path: "/usr/local/bin/gh"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "Bash"
-      path: "/bin/bash"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "Curl"
-      path: "/usr/bin/curl"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "Make"
-      path: "/usr/bin/make"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "Git"
-      path: "/usr/bin/git"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "Azure CLI"
-      path: "/usr/local/bin/az"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "JQ"
-      path: "/usr/bin/jq"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "zip"
-      path: "/usr/bin/zip"
-      shouldExist: true
-      isExecutableBy: "any"
-    - name: "subuid"
-      path: "/etc/subuid"
-      shouldExist: true
-    - name: "subgid"
-      path: "/etc/subgid"
-      shouldExist: true
-    - name: "temp directory for user jenkins"
-      path: "/run/jenkins/1000"
-      shouldExist: true
-    - name: "homedir of the user jenkins"
-      path: "/home/jenkins"
-      shouldExist: true
+  - name: "entrypoint"
+    path: "/usr/local/bin/entrypoint.sh"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "gh"
+    path: "/usr/local/bin/gh"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Bash"
+    path: "/bin/bash"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Curl"
+    path: "/usr/bin/curl"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Make"
+    path: "/usr/bin/make"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Git"
+    path: "/usr/bin/git"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "Azure CLI"
+    path: "/usr/local/bin/az"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "JQ"
+    path: "/usr/bin/jq"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "zip"
+    path: "/usr/bin/zip"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "subuid"
+    path: "/etc/subuid"
+    shouldExist: true
+  - name: "subgid"
+    path: "/etc/subgid"
+    shouldExist: true
+  - name: "temp directory for user jenkins"
+    path: "/run/jenkins/1000"
+    shouldExist: true
+  - name: "homedir of the user jenkins"
+    path: "/home/jenkins"
+    shouldExist: true
 fileContentTests:
-    - name: "user jenkins exists"
-      path: "/etc/passwd"
-      expectedContents: [".*jenkins:x:1000:1000.*"]
-    - name: "subuid contains user jenkins with expected subordinate UIDs/GIDs"
-      path: "/etc/subuid"
-      expectedContents: [".*jenkins:100000:65536.*"]
-    - name: "subgid contains user jenkins with expected subordinate UIDs/GIDs"
-      path: "/etc/subgid"
-      expectedContents: [".*jenkins:100000:65536.*"]
-    - name: "Base OS is the expected distribution and versions"
-      path: "/etc/os-release"
-      expectedContents: ['PRETTY_NAME="Debian GNU/Linux 11 \(bullseye\)"']
+  - name: "user jenkins exists"
+    path: "/etc/passwd"
+    expectedContents: [".*jenkins:x:1000:1000.*"]
+  - name: "subuid contains user jenkins with expected subordinate UIDs/GIDs"
+    path: "/etc/subuid"
+    expectedContents: [".*jenkins:100000:65536.*"]
+  - name: "subgid contains user jenkins with expected subordinate UIDs/GIDs"
+    path: "/etc/subgid"
+    expectedContents: [".*jenkins:100000:65536.*"]
+  - name: "Base OS is the expected distribution and versions"
+    path: "/etc/os-release"
+    expectedContents: ['PRETTY_NAME="Debian GNU/Linux 11 \(bullseye\)"']
