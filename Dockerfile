@@ -64,7 +64,7 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install Azure Cli
-ARG AZ_CLI_VERSION=2.45.0
+ARG AZ_CLI_VERSION=2.46.0
 # hadolint ignore=DL3013,DL3018
 RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" && az --version
 
