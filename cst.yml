@@ -18,7 +18,7 @@ metadataTest:
         - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
           value: "3107.v665000b_51092-4"
         - key: io.jenkins-infra.tools.netlify-deploy.version
-          value: "0.1.5"
+          value: "0.1.8"
         - key: io.jenkins-infra.tools.asdf.version
           value: "0.11.2"
         - key: io.jenkins-infra.tools.azure-cli.version
