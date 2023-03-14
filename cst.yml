@@ -52,7 +52,7 @@ fileExistenceTests:
     shouldExist: true
     isExecutableBy: "any"
   - name: "Azure CLI"
-    path: "/usr/local/bin/az"
+    path: "/usr/bin/az"
     shouldExist: true
     isExecutableBy: "any"
   - name: "JQ"
