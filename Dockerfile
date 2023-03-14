@@ -25,8 +25,9 @@ RUN \
   # python
   python3 \
   python3-pip \
-  # Required for installing azure-cli through pip (the debian package is not multi-arch)
-  python3-dev \
+  # # Required for installing azure-cli through the debian package
+  gpg \
+  lsb-release \
   # Required for building Ruby
   libssl-dev libreadline-dev zlib1g-dev \
   # Required for some of the ruby gems that will be installed
@@ -65,8 +66,21 @@ RUN mkdir -p /tmp/netlify && \
 
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.46.0
-# hadolint ignore=DL3013,DL3018
-RUN pip3 install --no-cache-dir azure-cli=="${AZ_CLI_VERSION}" && az --version
+# Download and install the Microsoft signing key
+RUN mkdir -p /etc/apt/keyrings \
+  && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
+  && chmod go+r /etc/apt/keyrings/microsoft.gpg \
+  # Add the Azure CLI software repository
+  && AZ_REPO=$(lsb_release -cs) \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list \
+  # Update repository information and install the azure-cli package
+  && apt-get -y update \
+  && apt-get -y install --no-install-recommends azure-cli="${AZ_CLI_VERSION}-1~${AZ_REPO}" \
+  # Sanity check
+  && az version \
+  # Cleanup
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
