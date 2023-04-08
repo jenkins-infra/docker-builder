@@ -1,4 +1,4 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-4
+ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-5
 
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk11
 USER root
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-4
+ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-5
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
@@ -44,7 +44,7 @@ ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
 RUN pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" && blobxfer --version
 
-ARG GH_VERSION=2.25.1
+ARG GH_VERSION=2.27.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
   "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
@@ -65,7 +65,7 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install Azure Cli
-ARG AZ_CLI_VERSION=2.46.0
+ARG AZ_CLI_VERSION=2.47.0
 # Download and install the Microsoft signing key
 RUN mkdir -p /etc/apt/keyrings \
   && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
