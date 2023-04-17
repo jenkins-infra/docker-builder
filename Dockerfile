@@ -82,6 +82,24 @@ RUN mkdir -p /etc/apt/keyrings \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ARG TYPOS_VERSION=1.14.6
+# ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
+RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
+  "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+  # && sha256sum /tmp/typos.tar.gz | grep -q "${TYPOS_SHASUM_256}" \
+  && tar xvfz /tmp/typos.tar.gz -C /usr/local/bin ./typos \
+  && chmod a+x /usr/local/bin/typos \
+  && typos --help
+
+ARG TYPOS_CHECKSTYLE_VERSION=0.1.1
+# ARG TYPOS_CHECKSTYLE_SHASUM_256="547b922873ece451fe45d44e060b571fbbd63ce5b830602fdf847bc6709dc505"
+RUN curl --silent --show-error --location --output /tmp/typos-checkstyle \
+  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-checkstyle-v${TYPOS_CHECKSTYLE_VERSION}-x86_64" \
+  # && sha256sum /tmp/typos-checkstyle | grep -q "${TYPOS_CHECKSTYLE_SHASUM_256}" \
+  && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
+  && chmod a+x /usr/local/bin/typos-checkstyle \
+  && typos-checkstyle --help
+
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
 
@@ -111,12 +129,14 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf install nodejs 18.15.0 && \
   asdf global nodejs 18.15.0"
 
-LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
+LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-inbound-agent.version="${JENKINS_INBOUND_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
 LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
 LABEL io.jenkins-infra.tools.asdf.version="${ASDF_VERSION}"
+LABEL io.jenkins-infra.tools.typos.version="${TYPOS_VERSION}"
+LABEL io.jenkins-infra.tools.typos-checkstyle.version="${TYPOS_CHECKSTYLE_VERSION}"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

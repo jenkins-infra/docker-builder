@@ -23,6 +23,10 @@ metadataTest:
       value: "0.11.3"
     - key: io.jenkins-infra.tools.azure-cli.version
       value: "2.47.0"
+    - key: io.jenkins-infra.tools.typos.version
+      value: "1.14.6"
+    - key: io.jenkins-infra.tools.typos-checkstyle.version
+      value: "0.1.1"
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
   cmd: []
   workdir: "/home/jenkins"
@@ -61,6 +65,14 @@ fileExistenceTests:
     isExecutableBy: "any"
   - name: "zip"
     path: "/usr/bin/zip"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "typos"
+    path: "/usr/local/bin/typos"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "typos-checkstyle"
+    path: "/usr/local/bin/typos-checkstyle"
     shouldExist: true
     isExecutableBy: "any"
   - name: "subuid"
