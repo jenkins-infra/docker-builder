@@ -66,9 +66,9 @@ targets:
         matcher: "BLOBXFER_VERSION"
     scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
+    kind: github/pullrequest
     scmid: default
     title: Bump the `blobxfer` CLI version to {{ source "lastVersion" }}
     spec:

@@ -68,9 +68,9 @@ targets:
         matcher: "AZ_CLI_VERSION"
     scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
+    kind: github/pullrequest
     scmid: default
     title: Bump the `az` CLI version to {{ source "getAzCliVersion" }}
     spec:

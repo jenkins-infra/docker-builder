@@ -76,9 +76,9 @@ targets:
         matcher: "JENKINS_INBOUND_AGENT_VERSION"
     scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
+    kind: github/pullrequest
     scmid: default
     title: Bump Jenkins Inbound Agent Version to {{ source "lastVersion" }}
     spec:

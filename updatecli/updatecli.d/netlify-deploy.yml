@@ -66,9 +66,9 @@ targets:
         matcher: "NETLIFY_DEPLOY"
     scmid: default
 
-pullrequests:
+actions:
   default:
-    kind: github
+    kind: github/pullrequest
     scmid: default
     title: Bump the `netlify-deploy` CLI version to {{ source "lastVersion" }}
     spec:
