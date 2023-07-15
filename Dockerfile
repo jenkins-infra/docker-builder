@@ -1,4 +1,4 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-15
+ARG JENKINS_INBOUND_AGENT_VERSION=3131.vf2b_b_798b_ce99-3
 
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk11
 USER root
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3107.v665000b_51092-15
+ARG JENKINS_INBOUND_AGENT_VERSION=3131.vf2b_b_798b_ce99-3
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
