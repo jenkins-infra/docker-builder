@@ -52,7 +52,7 @@ conditions:
     spec:
       image: "jenkins/inbound-agent"
       architecture: "amd64"
-      tag: '{{ source "lastVersion" }}-alpine-jdk11'
+      tag: '{{ source "lastVersion" }}-jdk17'
 
 
 
