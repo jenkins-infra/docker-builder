@@ -25,7 +25,8 @@ RUN \
   # python
   python3 \
   python3-pip \
-  # # Required for installing azure-cli through the debian package
+  pipx \
+  # Required for installing azure-cli through the debian package
   gpg \
   lsb-release \
   # Required for building Ruby
@@ -39,10 +40,11 @@ RUN \
   apt-get clean &&\
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# plugin site
+# # plugin site
 ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
-RUN pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" && blobxfer --version
+RUN su - jenkins -c "pipx install blobxfer==${BLOBXFER_VERSION} --pip-args='--no-cache-dir'" \
+  && su - jenkins -c "blobxfer --version"
 
 ARG GH_VERSION=2.35.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
