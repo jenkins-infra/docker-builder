@@ -99,7 +99,7 @@ fileContentTests:
     expectedContents: [".*jenkins:100000:65536.*"]
   - name: "Base OS is the expected distribution and versions"
     path: "/etc/os-release"
-    expectedContents: ['PRETTY_NAME="Debian GNU/Linux 11 \(bullseye\)"']
+    expectedContents: ['PRETTY_NAME="Debian GNU/Linux 12 \(bookworm\)"']
 commandTests:
   - name: "Check that `java` is present in the PATH and default to JDK17"
     command: "java"
