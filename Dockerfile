@@ -1,4 +1,4 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3148.v532a_7e715ee3-4
+ARG JENKINS_INBOUND_AGENT_VERSION=3148.v532a_7e715ee3-7
 
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17
 USER root
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3148.v532a_7e715ee3-4
+ARG JENKINS_INBOUND_AGENT_VERSION=3148.v532a_7e715ee3-7
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
@@ -25,7 +25,8 @@ RUN \
   # python
   python3 \
   python3-pip \
-  # # Required for installing azure-cli through the debian package
+  pipx \
+  # Required for installing azure-cli through the debian package
   gpg \
   lsb-release \
   # Required for building Ruby
@@ -39,10 +40,11 @@ RUN \
   apt-get clean &&\
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# plugin site
+# # plugin site
 ARG BLOBXFER_VERSION=1.11.0
 # hadolint ignore=DL3018
-RUN pip3 install --no-cache-dir blobxfer=="${BLOBXFER_VERSION}" && blobxfer --version
+RUN su - jenkins -c "pipx install blobxfer==${BLOBXFER_VERSION} --pip-args='--no-cache-dir'" \
+  && su - jenkins -c "blobxfer --version"
 
 ARG GH_VERSION=2.35.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
