@@ -16,7 +16,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.blobxfer.version
       value: 1.11.0
     - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
-      value: 3148.v532a_7e715ee3-7
+      value: 3148.v532a_7e715ee3-9
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: 0.1.8
     - key: io.jenkins-infra.tools.asdf.version
