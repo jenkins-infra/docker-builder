@@ -21,6 +21,8 @@ metadataTest:
       value: 0.1.8
     - key: io.jenkins-infra.tools.asdf.version
       value: 0.13.1
+    - key: io.jenkins-infra.tools.azcopy.version
+      value: 10.21.0-20230928
     - key: io.jenkins-infra.tools.azure-cli.version
       value: 2.54.0
     - key: io.jenkins-infra.tools.typos.version
@@ -53,6 +55,10 @@ fileExistenceTests:
     isExecutableBy: "any"
   - name: "Git"
     path: "/usr/bin/git"
+    shouldExist: true
+    isExecutableBy: "any"
+  - name: "azcopy"
+    path: "/usr/local/bin/azcopy"
     shouldExist: true
     isExecutableBy: "any"
   - name: "Azure CLI"
