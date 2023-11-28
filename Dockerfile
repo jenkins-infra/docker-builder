@@ -66,6 +66,15 @@ RUN mkdir -p /tmp/netlify && \
   && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
   && netlify-deploy --help
 
+## Install azcopy
+ARG AZCOPY_VERSION=10.21.2-20231106
+# Download and install the Microsoft signing key
+RUN curl --silent --show-error --location \
+  "https://azcopyvnext.azureedge.net/releases/release-${AZCOPY_VERSION}/azcopy_linux_amd64_${AZCOPY_VERSION%-*}.tar.gz" \
+  | tar --extract --gzip --strip-components=1 --directory=/usr/local/bin/ --wildcards '*/azcopy' \
+  && chmod a+x /usr/local/bin/azcopy \
+  && azcopy --version
+
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.54.0
 # Download and install the Microsoft signing key
@@ -132,11 +141,12 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf global nodejs 18.18.0 && \
   asdf install nodejs 20.8.0"
 
-LABEL io.jenkins-infra.tools="azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
+LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-inbound-agent.version="${JENKINS_INBOUND_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
+LABEL io.jenkins-infra.tools.azcopy.version="${AZCOPY_VERSION}"
 LABEL io.jenkins-infra.tools.azure-cli.version="${AZ_CLI_VERSION}"
 LABEL io.jenkins-infra.tools.asdf.version="${ASDF_VERSION}"
 LABEL io.jenkins-infra.tools.typos.version="${TYPOS_VERSION}"
