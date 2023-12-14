@@ -137,9 +137,9 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf install ruby 3.2.2 && \
   asdf global ruby 3.2.2 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-  asdf install nodejs 18.18.0 && \
-  asdf global nodejs 18.18.0 && \
-  asdf install nodejs 20.8.0"
+  asdf install nodejs 18.19.0 && \
+  asdf global nodejs 18.19.0 && \
+  asdf install nodejs 20.10.0"
 
 LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
