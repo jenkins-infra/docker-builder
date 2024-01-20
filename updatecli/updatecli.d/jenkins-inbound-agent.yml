@@ -16,10 +16,10 @@ scms:
 sources:
   lastVersion:
     kind: githubrelease
-    name: Get the latest jenkins-inbound-agent version
+    name: Get the latest version
     spec:
       owner: "jenkinsci"
-      repository: "docker-inbound-agent"
+      repository: "docker-agent"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
       versionfilter:
