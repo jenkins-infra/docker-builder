@@ -20,7 +20,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: 0.1.8
     - key: io.jenkins-infra.tools.asdf.version
-      value: 0.13.1
+      value: 0.14.0
     - key: io.jenkins-infra.tools.azcopy.version
       value: 10.21.2-20231106
     - key: io.jenkins-infra.tools.azure-cli.version
