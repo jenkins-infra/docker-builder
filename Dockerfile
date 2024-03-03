@@ -127,19 +127,19 @@ ENV HOME=/home/"${USER}"
 
 # Install ASDF to install custom tools
 # NodeJS 18 is needed by the jenkins.io/plugins.jenkins.io websites
-# Ruby 3 is needed by some of the jenkins-infra/infra-report
+# Ruby 3 is needed by some of the jenkins-infra/infra-report and jenkins.io
 ARG ASDF_VERSION=0.14.0
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
   echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 3.2.2 && \
-  asdf global ruby 3.2.2 && \
+  asdf install ruby 3.3.0 && \
+  asdf global ruby 3.3.0 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 18.19.0 && \
   asdf global nodejs 18.19.0 && \
-  asdf install nodejs 20.10.0"
+  asdf install nodejs 20.11.1"
 
 LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
