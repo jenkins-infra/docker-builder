@@ -43,7 +43,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].key"
+      key: "$.metadataTest.labels[4].key"
       value: io.jenkins-infra.tools.netlify-deploy.version
 
 targets:
@@ -53,7 +53,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[4].value"
+      key: "$.metadataTest.labels[4].value"
     scmid: default
   updateDockerfileVersion:
     name: "Update the value of ARG NETLIFY_DEPLOY in the Dockerfile"
