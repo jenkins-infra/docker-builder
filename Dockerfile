@@ -22,10 +22,6 @@ RUN \
   jq \
   # jenkins.io archives stuff
   zip \
-  # python
-  python3 \
-  python3-pip \
-  pipx \
   # Required for installing azure-cli through the debian package
   gpg \
   lsb-release \
@@ -39,12 +35,6 @@ RUN \
   && \
   apt-get clean &&\
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# # plugin site
-ARG BLOBXFER_VERSION=1.11.0
-# hadolint ignore=DL3018
-RUN su - jenkins -c "pipx install blobxfer==${BLOBXFER_VERSION} --pip-args='--no-cache-dir'" \
-  && su - jenkins -c "blobxfer --version"
 
 ARG GH_VERSION=2.46.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
@@ -141,8 +131,7 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf global nodejs 18.19.0 && \
   asdf install nodejs 20.11.1"
 
-LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,blobxfer,jenkins-inbound-agent,netlify-deploy,asdf"
-LABEL io.jenkins-infra.tools.blobxfer.version="${BLOBXFER_VERSION}"
+LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
 LABEL io.jenkins-infra.tools.jenkins-inbound-agent.version="${JENKINS_INBOUND_AGENT_VERSION}"
 LABEL io.jenkins-infra.tools.netlify-deploy.version="${NETLIFY_DEPLOY}"
