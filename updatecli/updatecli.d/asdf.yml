@@ -43,7 +43,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[5].key"
+      key: "$.metadataTest.labels[5].key"
       value: io.jenkins-infra.tools.asdf.version
 
 targets:
@@ -53,7 +53,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[5].value"
+      key: "$.metadataTest.labels[5].value"
     scmid: default
   updateDockerfileArgVersion:
     name: "Update the value of ARG ASDF_VERSION in the Dockerfile"

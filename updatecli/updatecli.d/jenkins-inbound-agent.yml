@@ -43,7 +43,7 @@ conditions:
     disablesourceinput: true
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[3].key"
+      key: "$.metadataTest.labels[3].key"
       value: io.jenkins-infra.tools.jenkins-inbound-agent.version
   checkDockerImagePublished:
     name: "Is latest dockerfile docker-inbound-agent image published?"
@@ -63,7 +63,7 @@ targets:
     kind: yaml
     spec:
       file: "cst.yml"
-      key: "metadataTest.labels[3].value"
+      key: "$.metadataTest.labels[3].value"
     scmid: default
   updateDockerfileVersion:
     name: "Update the value of ARG JENKINS_INBOUND_AGENT_VERSION in the Dockerfile"
