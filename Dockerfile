@@ -1,4 +1,4 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3206.vb_15dcf73f6a_9-7
+ARG JENKINS_INBOUND_AGENT_VERSION=3206.vb_15dcf73f6a_9-9
 
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17
 USER root
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3206.vb_15dcf73f6a_9-7
+ARG JENKINS_INBOUND_AGENT_VERSION=3206.vb_15dcf73f6a_9-9
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
@@ -67,7 +67,7 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install azcopy
-ARG AZCOPY_VERSION=10.21.2-20231106
+ARG AZCOPY_VERSION=10.24.0-20240326
 # Download and install the Microsoft signing key
 RUN curl --silent --show-error --location \
   "https://azcopyvnext.azureedge.net/releases/release-${AZCOPY_VERSION}/azcopy_linux_amd64_${AZCOPY_VERSION%-*}.tar.gz" \

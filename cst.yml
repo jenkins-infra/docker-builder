@@ -16,13 +16,13 @@ metadataTest:
     - key: io.jenkins-infra.tools.blobxfer.version
       value: 1.11.0
     - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
-      value: 3206.vb_15dcf73f6a_9-7
+      value: 3206.vb_15dcf73f6a_9-9
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: 0.1.8
     - key: io.jenkins-infra.tools.asdf.version
       value: 0.14.0
     - key: io.jenkins-infra.tools.azcopy.version
-      value: 10.21.2-20231106
+      value: 10.24.0-20240326
     - key: io.jenkins-infra.tools.azure-cli.version
       value: 2.54.0
     - key: io.jenkins-infra.tools.typos.version
