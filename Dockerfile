@@ -129,7 +129,7 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
   asdf install nodejs 18.19.0 && \
   asdf global nodejs 18.19.0 && \
-  asdf install nodejs 20.11.1"
+  asdf install nodejs 20.12.1"
 
 LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
