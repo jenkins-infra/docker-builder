@@ -57,7 +57,7 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install azcopy
-ARG AZCOPY_VERSION=10.25.1-20240612
+ARG AZCOPY_VERSION=10.26.0-20240731
 # Download and install the Microsoft signing key
 RUN curl --silent --show-error --location \
   "https://azcopyvnext.azureedge.net/releases/release-${AZCOPY_VERSION}/azcopy_linux_amd64_${AZCOPY_VERSION%-*}.tar.gz" \
