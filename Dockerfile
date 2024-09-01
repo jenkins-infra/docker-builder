@@ -124,12 +124,12 @@ RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch 
   printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
   . $HOME/.asdf/asdf.sh && \
   asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 3.3.0 && \
-  asdf global ruby 3.3.0 && \
+  asdf install ruby 3.3.4 && \
+  asdf global ruby 3.3.4 && \
   asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-  asdf install nodejs 18.19.0 && \
-  asdf global nodejs 18.19.0 && \
-  asdf install nodejs 20.11.1"
+  asdf install nodejs 18.20.4 && \
+  asdf global nodejs 18.20.4 && \
+  asdf install nodejs 20.17.0"
 
 LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
