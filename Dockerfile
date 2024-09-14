@@ -66,7 +66,7 @@ RUN curl --silent --show-error --location \
   && azcopy --version
 
 ## Install Azure Cli
-ARG AZ_CLI_VERSION=2.63.0
+ARG AZ_CLI_VERSION=2.64.0
 # Download and install the Microsoft signing key
 RUN mkdir -p /etc/apt/keyrings \
   && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
