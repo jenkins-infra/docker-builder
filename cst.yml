@@ -56,7 +56,7 @@ fileExistenceTests:
     shouldExist: true
     isExecutableBy: "any"
   - name: "azcopy"
-    path: "/usr/local/bin/azcopy"
+    path: "/usr/bin/azcopy"
     shouldExist: true
     isExecutableBy: "any"
   - name: "Azure CLI"
