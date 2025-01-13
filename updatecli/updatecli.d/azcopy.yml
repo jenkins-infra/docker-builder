@@ -22,6 +22,8 @@ sources:
       repository: azure-storage-azcopy
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
+    transformers:
+      - trimprefix: 'v'
 
 conditions:
   testDockerfileArgAzCliVersion:
