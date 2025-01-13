@@ -57,13 +57,20 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install azcopy
-ARG AZCOPY_VERSION=10.27.1-20241113
-# Download and install the Microsoft signing key
-RUN curl --silent --show-error --location \
-  "https://azcopyvnext.azureedge.net/releases/release-${AZCOPY_VERSION}/azcopy_linux_amd64_${AZCOPY_VERSION%-*}.tar.gz" \
-  | tar --extract --gzip --strip-components=1 --directory=/usr/local/bin/ --wildcards '*/azcopy' \
-  && chmod a+x /usr/local/bin/azcopy \
-  && azcopy --version
+ARG AZCOPY_VERSION=10.27.1
+RUN rep_config_pkg="$(mktemp)" \
+  # Download and install the repository configuration package.
+  && curl --silent --show-error --location --output "${rep_config_pkg}" \
+  https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
+  && dpkg --install "${rep_config_pkg}" \
+  && rm -f "${rep_config_pkg}" \
+  && apt-get update --quiet \
+  && apt-get install --yes --no-install-recommends azcopy="${AZCOPY_VERSION}" \
+  # Sanity check
+  && azcopy --version \
+  # Cleanup
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.67.0
