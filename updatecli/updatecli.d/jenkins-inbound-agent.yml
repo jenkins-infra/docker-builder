@@ -22,10 +22,6 @@ sources:
       repository: "docker-agent"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
-      versionfilter:
-        kind: regex
-        ## not the JDK8 version - regex from https://stackoverflow.com/questions/16398471/regex-for-string-not-ending-with-given-suffix/16398502#16398502
-        pattern: '.*[^-][^j][^d][^k][^8]$'
 
 conditions:
   testDockerfile:
