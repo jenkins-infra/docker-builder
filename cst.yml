@@ -22,7 +22,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.azcopy.version
       value: 10.28.0
     - key: io.jenkins-infra.tools.azure-cli.version
-      value: 2.68.0
+      value: 2.69.0
     - key: io.jenkins-infra.tools.typos.version
       value: "1.14.6"
     - key: io.jenkins-infra.tools.typos-checkstyle.version
