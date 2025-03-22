@@ -12,7 +12,7 @@ metadataTest:
       value: ".*git.*"
       isRegex: true
     - key: io.jenkins-infra.tools.gh.version
-      value: 2.68.1
+      value: 2.69.0
     - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
       value: 3291.vb_131b_dc231fa_-1
     - key: io.jenkins-infra.tools.netlify-deploy.version
