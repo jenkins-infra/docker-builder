@@ -14,7 +14,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.gh.version
       value: 2.69.0
     - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
-      value: 3291.vb_131b_dc231fa_-1
+      value: 3299.v0d0d06908537-1
     - key: io.jenkins-infra.tools.netlify-deploy.version
       value: 0.1.8
     - key: io.jenkins-infra.tools.asdf.version
