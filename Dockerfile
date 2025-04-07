@@ -73,7 +73,7 @@ RUN rep_config_pkg="$(mktemp)" \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ## Install Azure Cli
-ARG AZ_CLI_VERSION=2.70.0
+ARG AZ_CLI_VERSION=2.71.0
 # Download and install the Microsoft signing key
 RUN mkdir -p /etc/apt/keyrings \
   && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
