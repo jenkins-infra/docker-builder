@@ -1,4 +1,1 @@
-parallelDockerUpdatecli([
-  imageName: 'builder',
-  useContainer: false,
- ])
+buildDockerAndPublishImage('builder')
