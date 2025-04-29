@@ -57,7 +57,7 @@ RUN mkdir -p /tmp/netlify && \
   && netlify-deploy --help
 
 ## Install azcopy
-ARG AZCOPY_VERSION=10.28.1
+ARG AZCOPY_VERSION=10.29.0
 RUN rep_config_pkg="$(mktemp)" \
   # Download and install the repository configuration package.
   && curl --silent --show-error --location --output "${rep_config_pkg}" \
