@@ -1,6 +1,6 @@
 ARG JENKINS_INBOUND_AGENT_VERSION=3309.v27b_9314fd1a_4-2
 
-FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17
+FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
