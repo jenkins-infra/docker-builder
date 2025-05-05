@@ -105,7 +105,7 @@ fileContentTests:
     path: "/etc/os-release"
     expectedContents: ['PRETTY_NAME="Debian GNU/Linux 12 \(bookworm\)"']
 commandTests:
-  - name: "Check that `java` is present in the PATH and default to JDK17"
+  - name: "Check that `java` is present in the PATH and default to JDK21"
     command: "java"
     args: ["--version"]
-    expectedOutput: ["Temurin-17"]
+    expectedOutput: ["Temurin-21"]
