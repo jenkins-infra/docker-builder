@@ -1,5 +1,5 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3307.v632ed11b_3a_c7-2
-ARG JAVA_VERSION=17.0.15_6      ## default/path pipeline
+ARG JENKINS_INBOUND_AGENT_VERSION=3309.v27b_9314fd1a_4-1
+ARG JAVA_VERSION=17.0.15_6
 
 FROM eclipse-temurin:${JAVA_VERSION}-jdk-jammy AS jdk
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21 AS jenkins-agent
@@ -9,7 +9,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3307.v632ed11b_3a_c7-2
+ARG JENKINS_INBOUND_AGENT_VERSION=3309.v27b_9314fd1a_4-1
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
