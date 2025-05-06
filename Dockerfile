@@ -1,6 +1,9 @@
 ARG JENKINS_INBOUND_AGENT_VERSION=3307.v632ed11b_3a_c7-2
+ARG JAVA_VERSION=17.0.15_6      ## default/path pipeline
 
-FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21
+FROM eclipse-temurin:${JAVA_VERSION}-jdk-jammy AS jdk
+FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21 AS jenkins-agent
+
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
@@ -107,6 +110,17 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle \
   && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
   && chmod a+x /usr/local/bin/typos-checkstyle \
   && typos-checkstyle --help
+
+ENV JAVA_HOME=/opt/build-jdk
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+COPY --from=jdk /opt/java/openjdk ${JAVA_HOME}
+
+# Use 1000 to be sure weight is always the bigger
+RUN update-alternatives --install /usr/bin/java java "${JAVA_HOME}"/bin/java 1000 \
+# Ensure JAVA_HOME variable is available to all shells
+  && echo "JAVA_HOME=${JAVA_HOME}" >> /etc/environment \
+  && echo "PATH=${JAVA_HOME}/bin:$PATH" >> /etc/environment \
+  && java -version
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
