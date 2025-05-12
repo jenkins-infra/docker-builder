@@ -91,7 +91,7 @@ RUN mkdir -p /etc/apt/keyrings \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# todo track with updatecli
+# todo track with updatecli (with cst.yml)
 # add platform aarch64 compliance
 ARG TYPOS_VERSION=1.14.6
 # ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
@@ -102,7 +102,7 @@ RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
   && chmod a+x /usr/local/bin/typos \
   && typos --help
 
-# todo track with updatecli
+# todo track with updatecli (with cst.yml)
 # add platform aarch64 compliance
 ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
 RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz \
