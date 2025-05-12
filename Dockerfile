@@ -15,6 +15,7 @@ RUN \
   LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
   # Used to download binaries (implies the package "ca-certificates" as a dependency)
   curl \
+  xz-utils \
   # Dev. Tooling packages (e.g. tools provided by this image installable through Alpine Linux Packages)
   git \
   make \
@@ -90,6 +91,8 @@ RUN mkdir -p /etc/apt/keyrings \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# todo track with updatecli
+# add platform aarch64 compliance
 ARG TYPOS_VERSION=1.14.6
 # ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
 RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
@@ -99,12 +102,12 @@ RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
   && chmod a+x /usr/local/bin/typos \
   && typos --help
 
+# todo track with updatecli
+# add platform aarch64 compliance
 ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
-# ARG TYPOS_CHECKSTYLE_SHASUM_256="547b922873ece451fe45d44e060b571fbbd63ce5b830602fdf847bc6709dc505"
-RUN curl --silent --show-error --location --output /tmp/typos-checkstyle \
-  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-checkstyle-v${TYPOS_CHECKSTYLE_VERSION}-x86_64" \
-  # && sha256sum /tmp/typos-checkstyle | grep -q "${TYPOS_CHECKSTYLE_SHASUM_256}" \
-  && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
+RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz \
+  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz" \
+  && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /usr/local/bin/ --wildcards "*/typos-checkstyle" \
   && chmod a+x /usr/local/bin/typos-checkstyle \
   && typos-checkstyle --help
 
