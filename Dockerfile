@@ -39,22 +39,33 @@ RUN \
 
 ARG GH_VERSION=2.72.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
-RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
-  "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
+RUN ARCH="$(uname -m)" && \
+  if [ "$ARCH" = "x86_64" ]; then \
+    DOWNLOAD_URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz"; \
+  elif [ "$ARCH" = "aarch64" ]; then \
+    DOWNLOAD_URL="https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_arm64.tar.gz"; \
+  else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi \
+  && curl --silent --show-error --location --output /tmp/gh.tar.gz "${DOWNLOAD_URL}" \
   # && sha256sum /tmp/gh.tar.gz | grep -q "${GH_SHASUM_256}" \
-  && tar xvfz /tmp/gh.tar.gz -C /tmp \
-  && mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh \
-  && chmod a+x /usr/local/bin/gh \
+  && tar -xvf /tmp/gh.tar.gz --strip-components=2 --directory /usr/local/bin/ --wildcards "*/gh" \
+  && rm -rf /tmp/gh* \
   && gh --help
 
 ARG NETLIFY_DEPLOY=0.1.8
-RUN mkdir -p /tmp/netlify && \
-  curl --silent --show-error --location --output /tmp/netlify.tar.gz \
-  "https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz" \
-  && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
-  && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
-  && chmod a+x /usr/local/bin/netlify-deploy \
-  && rm -rf /tmp/netlify /tmp/netlify.tar.gz \
+RUN ARCH="$(uname -m)" && \
+  if [ "$ARCH" = "x86_64" ]; then \
+    DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz"; \
+  elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
+    DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_arm64.tar.gz"; \
+  else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi \
+  && curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
+  && tar -xvf /tmp/netlify.tar.gz --directory /usr/local/bin/ "netlify-golang-deploy" \
+  && ln -s /usr/local/bin/netlify-golang-deploy /usr/local/bin/netlify-deploy \
+  && rm -rf /tmp/netlify.tar.gz \
   && netlify-deploy --help
 
 ## Install azcopy
@@ -93,22 +104,38 @@ RUN mkdir -p /etc/apt/keyrings \
 
 # todo track with updatecli (with cst.yml)
 # add platform aarch64 compliance
-ARG TYPOS_VERSION=1.14.6
+ARG TYPOS_VERSION=1.32.0
 # ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
-RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
-  "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+RUN ARCH="$(uname -m)" && \
+  if [ "$ARCH" = "x86_64" ]; then \
+    DOWNLOAD_URL="https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz"; \
+    elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
+    DOWNLOAD_URL="https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-aarch64-unknown-linux-musl.tar.gz"; \
+  else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi \
+  && curl --silent --show-error --location --output /tmp/typos.tar.gz "${DOWNLOAD_URL}" \
   # && sha256sum /tmp/typos.tar.gz | grep -q "${TYPOS_SHASUM_256}" \
   && tar xvfz /tmp/typos.tar.gz -C /usr/local/bin ./typos \
   && chmod a+x /usr/local/bin/typos \
+  && rm -rf /tmp/typos.tar.gz \
   && typos --help
 
 # todo track with updatecli (with cst.yml)
 # add platform aarch64 compliance
 ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
-RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz \
-  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz" \
+RUN ARCH="$(uname -m)" && \
+  if [ "$ARCH" = "x86_64" ]; then \
+    DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz"; \
+    elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
+    DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-aarch64-unknown-linux-gnu.tar.xz"; \
+  else \
+    echo "Unsupported architecture: $ARCH" && exit 1; \
+  fi \
+  && curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz "${DOWNLOAD_URL}" \
   && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /usr/local/bin/ --wildcards "*/typos-checkstyle" \
   && chmod a+x /usr/local/bin/typos-checkstyle \
+  && rm -rf /tmp/typos-checkstyle.tar.xz \
   && typos-checkstyle --help
 
 ARG USER=jenkins
