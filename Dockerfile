@@ -99,7 +99,7 @@ RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
   && chmod a+x /usr/local/bin/typos \
   && typos --help
 
-ARG TYPOS_CHECKSTYLE_VERSION=0.1.1
+ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
 # ARG TYPOS_CHECKSTYLE_SHASUM_256="547b922873ece451fe45d44e060b571fbbd63ce5b830602fdf847bc6709dc505"
 RUN curl --silent --show-error --location --output /tmp/typos-checkstyle \
   "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-checkstyle-v${TYPOS_CHECKSTYLE_VERSION}-x86_64" \
