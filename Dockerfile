@@ -94,19 +94,19 @@ RUN ARCH="$(uname -m)"; \
 ARG AZ_CLI_VERSION=2.72.0
 # Download and install the Microsoft signing key
 RUN mkdir -p /etc/apt/keyrings \
-  && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
-  && chmod go+r /etc/apt/keyrings/microsoft.gpg \
-  # Add the Azure CLI software repository
-  && AZ_REPO=$(lsb_release -cs) \
-  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list \
-  # Update repository information and install the azure-cli package
-  && apt-get -y update \
-  && apt-get -y install --no-install-recommends azure-cli="${AZ_CLI_VERSION}-1~${AZ_REPO}" \
-  # Sanity check
-  && az version \
-  # Cleanup
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    && curl -sLS https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /etc/apt/keyrings/microsoft.gpg > /dev/null \
+    && chmod go+r /etc/apt/keyrings/microsoft.gpg \
+    # Add the Azure CLI software repository
+    && AZ_REPO=$(lsb_release -cs) \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | tee /etc/apt/sources.list.d/azure-cli.list \
+    # Update repository information and install the azure-cli package
+    && apt-get -y update \
+    && apt-get -y install --no-install-recommends azure-cli="${AZ_CLI_VERSION}-1~${AZ_REPO}" \
+    # Sanity check
+    && az version \
+    # Cleanup
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG TYPOS_VERSION=1.32.0
 # ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
