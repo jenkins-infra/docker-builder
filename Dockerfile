@@ -40,8 +40,7 @@ RUN apt-get -y update && \
 ARG GH_VERSION=2.72.0
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_$(dpkg --print-architecture).tar.gz" \
-    && tar xvfz /tmp/gh.tar.gz -C /tmp \
-    && mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh \
+    && tar -xvf /tmp/gh.tar.gz --strip-components=2 --directory /usr/local/bin/ --wildcards "*/gh" \
     && chmod a+x /usr/local/bin/gh \
     && gh --help
 
@@ -59,8 +58,8 @@ RUN ARCH="$(dpkg --print-architecture)"; \
         exit 1; \
         ;; \
     esac; \
-    mkdir -p /tmp/netlify && \
-    curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
+    mkdir -p /tmp/netlify \
+    && curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
     && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
     && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
     && chmod a+x /usr/local/bin/netlify-deploy \
@@ -143,18 +142,18 @@ RUN ARCH="$(dpkg --print-architecture)"; \
         ;; \
     esac; \
     curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz "${DOWNLOAD_URL}" \
-  && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /tmp/ --wildcards "*/typos-checkstyle" \
-  && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
-  && chmod a+x /usr/local/bin/typos-checkstyle \
-  && rm -rf /tmp/typos-checkstyle.tar.xz \
-  && typos-checkstyle --help
+    && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /tmp/ --wildcards "*/typos-checkstyle" \
+    && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
+    && chmod a+x /usr/local/bin/typos-checkstyle \
+    && rm -rf /tmp/typos-checkstyle.tar.xz \
+    && typos-checkstyle --help
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
 
 RUN mkdir -p "${XDG_RUNTIME_DIR}" \
-  && chown -R "${USER}" "${XDG_RUNTIME_DIR}" \
-  && echo "${USER}":100000:65536 | tee /etc/subuid | tee /etc/subgid
+    && chown -R "${USER}" "${XDG_RUNTIME_DIR}" \
+    && echo "${USER}":100000:65536 | tee /etc/subuid | tee /etc/subgid
 
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod a+x /usr/local/bin/entrypoint.sh
@@ -168,16 +167,16 @@ ENV HOME=/home/"${USER}"
 # Ruby 3 is needed by some of the jenkins-infra/infra-report and jenkins.io
 ARG ASDF_VERSION=0.15.0
 RUN bash -c "git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v${ASDF_VERSION} && \
-  echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
-  printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
-  . $HOME/.asdf/asdf.sh && \
-  asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
-  asdf install ruby 3.3.4 && \
-  asdf global ruby 3.3.4 && \
-  asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
-  asdf install nodejs 18.20.4 && \
-  asdf global nodejs 18.20.4 && \
-  asdf install nodejs 20.17.0"
+    echo 'legacy_version_file = yes' > $HOME/.asdfrc && \
+    printf 'yarn\njsonlint' > $HOME/.default-npm-packages && \
+    . $HOME/.asdf/asdf.sh && \
+    asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git && \
+    asdf install ruby 3.3.4 && \
+    asdf global ruby 3.3.4 && \
+    asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git && \
+    asdf install nodejs 18.20.4 && \
+    asdf global nodejs 18.20.4 && \
+    asdf install nodejs 20.17.0"
 
 LABEL io.jenkins-infra.tools="azcopy,azure-cli,git,make,gh,typos,nodejs,npm,jenkins-inbound-agent,netlify-deploy,asdf"
 LABEL io.jenkins-infra.tools.gh.version="${GH_VERSION}"
