@@ -99,11 +99,10 @@ RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
   && chmod a+x /usr/local/bin/typos \
   && typos --help
 
-ARG TYPOS_CHECKSTYLE_VERSION=0.1.1
-# ARG TYPOS_CHECKSTYLE_SHASUM_256="547b922873ece451fe45d44e060b571fbbd63ce5b830602fdf847bc6709dc505"
-RUN curl --silent --show-error --location --output /tmp/typos-checkstyle \
-  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-checkstyle-v${TYPOS_CHECKSTYLE_VERSION}-x86_64" \
-  # && sha256sum /tmp/typos-checkstyle | grep -q "${TYPOS_CHECKSTYLE_SHASUM_256}" \
+ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
+RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz \
+  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz" \
+  && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /tmp/ --wildcards "*/typos-checkstyle" \
   && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
   && chmod a+x /usr/local/bin/typos-checkstyle \
   && typos-checkstyle --help
