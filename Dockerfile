@@ -129,11 +129,24 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     && typos --help
 
 ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
-RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz \
-  "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz" \
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "${ARCH}" in \
+      aarch64|arm64) \
+        DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-aarch64-unknown-linux-gnu.tar.xz"; \
+        ;; \
+      amd64|x86_64) \
+        DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz"; \
+        ;; \
+      *) \
+        echo "Unsupported arch: ${ARCH}"; \
+        exit 1; \
+        ;; \
+    esac; \
+    curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz "${DOWNLOAD_URL}" \
   && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /tmp/ --wildcards "*/typos-checkstyle" \
   && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
   && chmod a+x /usr/local/bin/typos-checkstyle \
+  && rm -rf /tmp/typos-checkstyle.tar.xz \
   && typos-checkstyle --help
 
 ARG USER=jenkins
