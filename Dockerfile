@@ -10,31 +10,32 @@ ARG JENKINS_INBOUND_AGENT_VERSION=3309.v27b_9314fd1a_4-1
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
-RUN \
-  apt-get -y update && \
-  LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-  # Used to download binaries (implies the package "ca-certificates" as a dependency)
-  curl \
-  # Dev. Tooling packages (e.g. tools provided by this image installable through Alpine Linux Packages)
-  git \
-  make \
-  build-essential \
-  jq \
-  # jenkins.io archives stuff
-  zip \
-  # Required for installing azure-cli through the debian package
-  gpg \
-  lsb-release \
-  # Required for building Ruby
-  libssl-dev libreadline-dev zlib1g-dev \
-  # Required for some of the ruby gems that will be installed
-  libyaml-dev libncurses5-dev libffi-dev libgdbm-dev \
-  # UI libraries so playwright UI tests can be run
-  libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libdbus-1-3 libxcb1 libxkbcommon0 libx11-6 libxcomposite1 libxdamage1 \
-    libxext6 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 libatspi2.0-0 libwayland-client0 \
-  && \
-  apt-get clean &&\
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get -y update && \
+    LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    # Used to download binaries (implies the package "ca-certificates" as a dependency)
+    curl \
+    # Used to untar xz files (typos-checkstyle)
+    xz-utils \
+    # Dev. Tooling packages (e.g. tools provided by this image installable through Alpine Linux Packages)
+    git \
+    make \
+    build-essential \
+    jq \
+    # jenkins.io archives stuff
+    zip \
+    # Required for installing azure-cli through the debian package
+    gpg \
+    lsb-release \
+    # Required for building Ruby
+    libssl-dev libreadline-dev zlib1g-dev \
+    # Required for some of the ruby gems that will be installed
+    libyaml-dev libncurses5-dev libffi-dev libgdbm-dev \
+    # UI libraries so playwright UI tests can be run
+    libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libdbus-1-3 libxcb1 libxkbcommon0 libx11-6 libxcomposite1 libxdamage1 \
+      libxext6 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 libatspi2.0-0 libwayland-client0 \
+    && \
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG GH_VERSION=2.72.0
 # ARG GH_SHASUM_256="6df9b0214f352fe62b2998c2d1b9828f09c8e133307c855c20c1924134d3da25"
