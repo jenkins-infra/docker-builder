@@ -46,6 +46,8 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
 
 ARG NETLIFY_DEPLOY=0.1.8
 RUN mkdir -p /tmp/netlify \
+    # DEBUG
+    && dpkg --print-architecture \
     && curl --silent --show-error --location --output /tmp/netlify.tar.gz "https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_$(dpkg --print-architecture).tar.gz" \
     && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
     && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
