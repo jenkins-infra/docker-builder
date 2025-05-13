@@ -101,7 +101,7 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG TYPOS_VERSION=1.14.6
+ARG TYPOS_VERSION=1.32.0
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
       aarch64|arm64) \
