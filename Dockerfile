@@ -90,7 +90,7 @@ RUN mkdir -p /etc/apt/keyrings \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG TYPOS_VERSION=1.14.6
+ARG TYPOS_VERSION=1.32.0
 # ARG TYPOS_SHASUM_256="27ce43632f09d5dbeb2231fe6bbd7e99eef4ed06a9149cd843d35f70a798058c"
 RUN curl --silent --show-error --location --output /tmp/typos.tar.gz \
   "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
