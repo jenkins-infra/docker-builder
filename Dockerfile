@@ -45,21 +45,8 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     && gh --help
 
 ARG NETLIFY_DEPLOY=0.1.8
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "${ARCH}" in \
-      aarch64|arm64) \
-        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz"; \
-        ;; \
-      amd64|x86_64) \
-        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_arm64.tar.gz"; \
-        ;; \
-      *) \
-        echo "Unsupported arch: ${ARCH}"; \
-        exit 1; \
-        ;; \
-    esac; \
-    mkdir -p /tmp/netlify \
-    && curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
+RUN mkdir -p /tmp/netlify \
+    && curl --silent --show-error --location --output /tmp/netlify.tar.gz "https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_$(uname -m).tar.gz" \
     && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
     && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
     && chmod a+x /usr/local/bin/netlify-deploy \
@@ -107,41 +94,15 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG TYPOS_VERSION=1.14.6
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "${ARCH}" in \
-      aarch64|arm64) \
-        DOWNLOAD_URL="https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-aarch64-unknown-linux-musl.tar.gz"; \
-        ;; \
-      amd64|x86_64) \
-        DOWNLOAD_URL="https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-x86_64-unknown-linux-musl.tar.gz"; \
-        ;; \
-      *) \
-        echo "Unsupported arch: ${ARCH}"; \
-        exit 1; \
-        ;; \
-    esac; \
-    curl --silent --show-error --location --output /tmp/typos.tar.gz "${DOWNLOAD_URL}" \
+ARG TYPOS_VERSION=1.32.0
+RUN curl --silent --show-error --location --output /tmp/typos.tar.gz "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz" \
     && tar xvfz /tmp/typos.tar.gz -C /usr/local/bin ./typos \
     && chmod a+x /usr/local/bin/typos \
     && rm -rf /tmp/typos.tar.gz \
     && typos --help
 
 ARG TYPOS_CHECKSTYLE_VERSION=0.2.0
-RUN ARCH="$(dpkg --print-architecture)"; \
-    case "${ARCH}" in \
-      aarch64|arm64) \
-        DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-aarch64-unknown-linux-gnu.tar.xz"; \
-        ;; \
-      amd64|x86_64) \
-        DOWNLOAD_URL="https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-x86_64-unknown-linux-gnu.tar.xz"; \
-        ;; \
-      *) \
-        echo "Unsupported arch: ${ARCH}"; \
-        exit 1; \
-        ;; \
-    esac; \
-    curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz "${DOWNLOAD_URL}" \
+RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz "https://github.com/halkeye/typos-json-to-checkstyle/releases/download/v${TYPOS_CHECKSTYLE_VERSION}/typos-json-to-checkstyle-$(uname -m)-unknown-linux-gnu.tar.xz" \
     && tar -xf /tmp/typos-checkstyle.tar.xz --strip-components=1 --directory /tmp/ --wildcards "*/typos-checkstyle" \
     && mv /tmp/typos-checkstyle /usr/local/bin/typos-checkstyle \
     && chmod a+x /usr/local/bin/typos-checkstyle \
