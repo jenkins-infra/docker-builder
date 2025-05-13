@@ -44,12 +44,22 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     && chmod a+x /usr/local/bin/gh \
     && gh --help
 
-# DEBUG
-RUN dpkg --print-architecture
-
 ARG NETLIFY_DEPLOY=0.1.8
-RUN mkdir -p /tmp/netlify \
-    && curl --silent --show-error --location --output /tmp/netlify.tar.gz "https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_$(dpkg --print-architecture).tar.gz" \
+RUN ARCH="$(dpkg --print-architecture)"; \
+    case "${ARCH}" in \
+      aarch64|arm64) \
+        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_arm64.tar.gz"; \
+        ;; \
+      amd64|x86_64) \
+        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz"; \
+        ;; \
+      *) \
+        echo "Unsupported arch: ${ARCH}"; \
+        exit 1; \
+        ;; \
+    esac; \
+    mkdir -p /tmp/netlify \
+    && curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
     && tar xvfz /tmp/netlify.tar.gz -C /tmp/netlify \
     && mv /tmp/netlify/netlify-golang-deploy /usr/local/bin/netlify-deploy \
     && chmod a+x /usr/local/bin/netlify-deploy \
