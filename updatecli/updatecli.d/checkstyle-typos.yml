@@ -1,0 +1,75 @@
+---
+name: Bump `typos-checkstyle` version
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ .github.owner }}"
+      repository: "{{ .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  lastReleaseVersion:
+    kind: githubrelease
+    name: Get the latest `typos-checkstyle` version
+    spec:
+      owner: halkeye
+      repository: typos-json-to-checkstyle
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+    transformers:
+      - trimprefix: 'v'
+
+conditions:
+  testDockerfileArgTyposCheckstyleVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is TYPOS_CHECKSTYLE_VERSION?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "TYPOS_CHECKSTYLE_VERSION"
+  testCstTyposCheckstyleVersion:
+    name: "Does the test harness checks for a label io.jenkins-infra.tools.typos-checkstyle.version?"
+    kind: yaml
+    disablesourceinput: true
+    spec:
+      file: "cst.yml"
+      key: "$.metadataTest.labels[8].key"
+      value: io.jenkins-infra.tools.typos-checkstyle.version
+
+targets:
+  updateCstVersion:
+    name: "Update the label io.jenkins-infra.tools.typos-checkstyle.version in the test harness"
+    sourceid: lastReleaseVersion
+    kind: yaml
+    spec:
+      file: "cst.yml"
+      key: "$.metadataTest.labels[8].value"
+    scmid: default
+  updateDockerfileArgVersion:
+    name: "Update the value of ARG TYPOS_CHECKSTYLE_VERSION in the Dockerfile"
+    sourceid: lastReleaseVersion
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "TYPOS_CHECKSTYLE_VERSION"
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    title: Bump typos-checkstyle version to {{ source "lastReleaseVersion" }}
+    scmid: default
+    spec:
+      labels:
+        - enhancement
+        - typos-checkstyle
