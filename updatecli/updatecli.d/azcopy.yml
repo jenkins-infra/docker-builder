@@ -43,7 +43,16 @@ conditions:
       file: "cst.yml"
       key: "$.metadataTest.labels[5].key"
       value: io.jenkins-infra.tools.azcopy.version
-
+  checkx86DebPackage:
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: https://github.com/Azure/azure-storage-azcopy/releases/download/v{{ source "lastReleaseVersion" }}/azcopy-{{ source "lastReleaseVersion" }}.x86_64.deb
+  checkArm64DebPackage:
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: https://github.com/Azure/azure-storage-azcopy/releases/download/v{{ source "lastReleaseVersion" }}/azcopy-{{ source "lastReleaseVersion" }}.arm64.deb
 targets:
   updateCstVersion:
     name: "Update the label io.jenkins-infra.tools.azcopy.version in the test harness"
