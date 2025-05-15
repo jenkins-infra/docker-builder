@@ -1,7 +1,10 @@
 ARG JENKINS_INBOUND_AGENT_VERSION=3307.v632ed11b_3a_c7-2
 ARG JAVA_VERSION=17.0.15_6      ## default/path pipeline
+ARG JDK21_VERSION=21.0.7_6
 
-FROM eclipse-temurin:${JAVA_VERSION}-jdk-jammy AS jdk
+FROM eclipse-temurin:${JAVA_VERSION}-jdk-jammy AS jdk-default
+FROM eclipse-temurin:${JDK21_VERSION}-jdk-jammy AS jdk21
+
 FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21 AS jenkins-agent
 
 USER root
@@ -125,16 +128,18 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz 
     && rm -rf /tmp/typos-checkstyle.tar.xz \
     && typos-checkstyle --help
 
-ENV JAVA_HOME=/opt/build-jdk
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
-COPY --from=jdk /opt/java/openjdk ${JAVA_HOME}
+ENV JAVA_HOME=/opt/java/openjdk
+COPY --from=jdk-default /opt/java/openjdk ${JAVA_HOME}
+
+# lets copy the jdk 21
+COPY --from=jdk21 /opt/java/openjdk /opt/jdk-21/
 
 # Use 1000 to be sure weight is always the bigger
 RUN update-alternatives --install /usr/bin/java java "${JAVA_HOME}"/bin/java 1000 \
-# Ensure JAVA_HOME variable is available to all shells
-  && echo "JAVA_HOME=${JAVA_HOME}" >> /etc/environment \
-  && echo "PATH=${JAVA_HOME}/bin:$PATH" >> /etc/environment \
-  && java -version
+    # Ensure JAVA_HOME variable is available to all shells
+    && echo "JAVA_HOME=${JAVA_HOME}" >> /etc/environment \
+    && echo "PATH=${JAVA_HOME}/bin:$PATH" >> /etc/environment \
+    && java -version
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000

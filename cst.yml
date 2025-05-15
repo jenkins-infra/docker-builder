@@ -109,7 +109,11 @@ commandTests:
     command: "java"
     args: ["--version"]
     expectedOutput: ["Temurin-17"]
-  - name: "Check that the agent (runtime) java in `/opt/java/openjdk/bin/java` defaults to JDK21"
+  - name: "Check that the agent (runtime) java in `/opt/java/openjdk/bin/java` defaults to JDK17"
     command: "/opt/java/openjdk/bin/java"
+    args: ["--version"]
+    expectedOutput: ["Temurin-17"]
+  - name: "Check that jdk21 is present and running in `/opt/jdk-21/bin/java`"
+    command: "/opt/jdk-21/bin/java"
     args: ["--version"]
     expectedOutput: ["Temurin-21"]
