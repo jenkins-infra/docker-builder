@@ -32,7 +32,7 @@ RUN apt-get -y update && \
     libyaml-dev libncurses5-dev libffi-dev libgdbm-dev \
     # UI libraries so playwright UI tests can be run
     libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libdbus-1-3 libxcb1 libxkbcommon0 libx11-6 libxcomposite1 libxdamage1 \
-      libxext6 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 libatspi2.0-0 libwayland-client0 \
+    libxext6 libxfixes3 libxrandr2 libgbm1 libpango-1.0-0 libcairo2 libasound2 libatspi2.0-0 libwayland-client0 \
     && \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -47,16 +47,16 @@ RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
 ARG NETLIFY_DEPLOY=0.1.8
 RUN ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
-      aarch64|arm64) \
-        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_arm64.tar.gz"; \
-        ;; \
-      amd64|x86_64) \
-        DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz"; \
-        ;; \
-      *) \
-        echo "Unsupported arch: ${ARCH}"; \
-        exit 1; \
-        ;; \
+        aarch64|arm64) \
+            DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_arm64.tar.gz"; \
+            ;; \
+        amd64|x86_64) \
+            DOWNLOAD_URL="https://github.com/halkeye/netlify-golang-deploy/releases/download/v${NETLIFY_DEPLOY}/netlify-golang-deploy_${NETLIFY_DEPLOY}_Linux_x86_64.tar.gz"; \
+            ;; \
+        *) \
+            echo "Unsupported arch: ${ARCH}"; \
+            exit 1; \
+            ;; \
     esac; \
     mkdir -p /tmp/netlify \
     && curl --silent --show-error --location --output /tmp/netlify.tar.gz "${DOWNLOAD_URL}" \
@@ -70,16 +70,16 @@ RUN ARCH="$(dpkg --print-architecture)"; \
 ARG AZCOPY_VERSION=10.29.0
 RUN ARCH="$(uname -m)"; \
     case "${ARCH}" in \
-      aarch64|arm64) \
-        azcopy_arch="arm64"; \
-        ;; \
-      amd64|x86_64) \
-        azcopy_arch="x86_64"; \
-        ;; \
-      *) \
-        echo "Unsupported arch: ${ARCH}"; \
-        exit 1; \
-        ;; \
+        aarch64|arm64) \
+            azcopy_arch="arm64"; \
+            ;; \
+        amd64|x86_64) \
+            azcopy_arch="x86_64"; \
+            ;; \
+        *) \
+            echo "Unsupported arch: ${ARCH}"; \
+            exit 1; \
+            ;; \
     esac; \
     azcopy_pkg="$(mktemp)" \
     && curl --silent --show-error --location --output "${azcopy_pkg}" "https://github.com/Azure/azure-storage-azcopy/releases/download/v${AZCOPY_VERSION}/azcopy-${AZCOPY_VERSION}.${azcopy_arch}.deb" \
