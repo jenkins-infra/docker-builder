@@ -1,1 +1,3 @@
-buildDockerAndPublishImage('builder')
+buildDockerAndPublishImage('builder', [
+    targetplatforms: 'linux/amd64',
+])
