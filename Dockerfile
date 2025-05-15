@@ -128,10 +128,12 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz 
     && rm -rf /tmp/typos-checkstyle.tar.xz \
     && typos-checkstyle --help
 
+## legacy jdk17 in /opt/java/openjdk
 ENV JAVA_HOME=/opt/java/openjdk
 COPY --from=jdk-default /opt/java/openjdk ${JAVA_HOME}
-
-# lets copy the jdk 21
+# copy jdk 17 in /opt/jdk-17
+COPY --from=jdk-default /opt/java/openjdk /opt/jdk-17
+# copy jdk 21 in /opt/jdk-21
 COPY --from=jdk21 /opt/java/openjdk /opt/jdk-21/
 
 # Use 1000 to be sure weight is always the bigger
