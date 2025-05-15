@@ -58,19 +58,26 @@ RUN mkdir -p /tmp/netlify && \
 
 ## Install azcopy
 ARG AZCOPY_VERSION=10.29.0
-RUN rep_config_pkg="$(mktemp)" \
-  # Download and install the repository configuration package.
-  && curl --silent --show-error --location --output "${rep_config_pkg}" \
-  https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
-  && dpkg --install "${rep_config_pkg}" \
-  && rm -f "${rep_config_pkg}" \
-  && apt-get update --quiet \
-  && apt-get install --yes --no-install-recommends azcopy="${AZCOPY_VERSION}" \
-  # Sanity check
-  && azcopy --version \
-  # Cleanup
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN ARCH="$(uname -m)"; \
+    case "${ARCH}" in \
+      aarch64|arm64) \
+        azcopy_arch="arm64"; \
+        ;; \
+      amd64|x86_64) \
+        azcopy_arch="x86_64"; \
+        ;; \
+      *) \
+        echo "Unsupported arch: ${ARCH}"; \
+        exit 1; \
+        ;; \
+    esac; \
+    azcopy_pkg="$(mktemp)" \
+    && curl --silent --show-error --location --output "${azcopy_pkg}" "https://github.com/Azure/azure-storage-azcopy/releases/download/v${AZCOPY_VERSION}/azcopy-${AZCOPY_VERSION}.${azcopy_arch}.deb" \
+    && dpkg --install "${azcopy_pkg}" \
+    # Sanity check
+    && azcopy --version \
+    # Cleanup
+    && rm -f "${azcopy_pkg}"
 
 ## Install Azure Cli
 ARG AZ_CLI_VERSION=2.72.0
