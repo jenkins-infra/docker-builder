@@ -48,7 +48,7 @@ conditions:
     spec:
       image: "jenkins/inbound-agent"
       architecture: "amd64"
-      tag: '{{ source "lastVersion" }}-jdk21'
+      tag: '{{ source "lastVersion" }}-jdk17'
 
 targets:
   updateTestVersion:
