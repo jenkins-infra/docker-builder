@@ -130,13 +130,6 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz 
 # copy jdk 21 in /opt/jdk-21
 COPY --from=jdk21 /opt/java/openjdk /opt/jdk-21/
 
-# Use 1000 to be sure weight is always the bigger
-RUN update-alternatives --install /usr/bin/java java "${JAVA_HOME}"/bin/java 1000 \
-    # Ensure JAVA_HOME variable is available to all shells
-    && echo "JAVA_HOME=${JAVA_HOME}" >> /etc/environment \
-    && echo "PATH=${JAVA_HOME}/bin:$PATH" >> /etc/environment \
-    && java -version
-
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000
 
