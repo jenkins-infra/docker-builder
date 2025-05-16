@@ -1,6 +1,10 @@
 ARG JENKINS_INBOUND_AGENT_VERSION=3309.v27b_9314fd1a_4-2
+ARG JDK21_VERSION=21.0.7_6
 
-FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17
+FROM eclipse-temurin:${JDK21_VERSION}-jdk-jammy AS jdk21
+# keep jdk17 as main stage but install jdk21 as optionnal to be able to switch from hieradata
+FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17 AS jenkins-agent
+
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
@@ -121,6 +125,10 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz 
     && chmod a+x /usr/local/bin/typos-checkstyle \
     && rm -rf /tmp/typos-checkstyle.tar.xz \
     && typos-checkstyle --help
+
+# legacy jdk17 in /opt/java/openjdk from primary layer
+# copy jdk 21 in /opt/jdk-21
+COPY --from=jdk21 /opt/java/openjdk /opt/jdk-21/
 
 ARG USER=jenkins
 ENV XDG_RUNTIME_DIR=/run/${USER}/1000

@@ -50,8 +50,6 @@ conditions:
       architecture: "amd64"
       tag: '{{ source "lastVersion" }}-jdk17'
 
-
-
 targets:
   updateTestVersion:
     name: "Update the test harness"

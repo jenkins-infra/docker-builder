@@ -105,7 +105,15 @@ fileContentTests:
     path: "/etc/os-release"
     expectedContents: ['PRETTY_NAME="Debian GNU/Linux 12 \(bookworm\)"']
 commandTests:
-  - name: "Check that `java` is present in the PATH and default to JDK17"
+  - name: "Check that buildtime `java` is present in the PATH and defaults to JDK17"
     command: "java"
     args: ["--version"]
     expectedOutput: ["Temurin-17"]
+  - name: "Check that the agent (runtime) java in `/opt/java/openjdk/bin/java` defaults to JDK17"
+    command: "/opt/java/openjdk/bin/java"
+    args: ["--version"]
+    expectedOutput: ["Temurin-17"]
+  - name: "Check that jdk21 is present and running in `/opt/jdk-21/bin/java`"
+    command: "/opt/jdk-21/bin/java"
+    args: ["--version"]
+    expectedOutput: ["Temurin-21"]
