@@ -1,11 +1,9 @@
 ARG JENKINS_INBOUND_AGENT_VERSION=3307.v632ed11b_3a_c7-2
-ARG JAVA_VERSION=17.0.15_6      ## default/path pipeline
 ARG JDK21_VERSION=21.0.7_6
 
-FROM eclipse-temurin:${JAVA_VERSION}-jdk-jammy AS jdk-default
 FROM eclipse-temurin:${JDK21_VERSION}-jdk-jammy AS jdk21
-
-FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk21 AS jenkins-agent
+# keep jdk17 as main stage but install jdk21 as optionnal to be able to switch from hieradata
+FROM jenkins/inbound-agent:${JENKINS_INBOUND_AGENT_VERSION}-jdk17 AS jenkins-agent
 
 USER root
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
@@ -128,11 +126,7 @@ RUN curl --silent --show-error --location --output /tmp/typos-checkstyle.tar.xz 
     && rm -rf /tmp/typos-checkstyle.tar.xz \
     && typos-checkstyle --help
 
-## legacy jdk17 in /opt/java/openjdk
-ENV JAVA_HOME=/opt/java/openjdk
-COPY --from=jdk-default /opt/java/openjdk ${JAVA_HOME}
-# copy jdk 17 in /opt/jdk-17
-COPY --from=jdk-default /opt/java/openjdk /opt/jdk-17
+# legacy jdk17 in /opt/java/openjdk from primary layer
 # copy jdk 21 in /opt/jdk-21
 COPY --from=jdk21 /opt/java/openjdk /opt/jdk-21/
 
