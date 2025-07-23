@@ -1,4 +1,4 @@
-ARG JENKINS_INBOUND_AGENT_VERSION=3327.v868139a_d00e0-1
+ARG JENKINS_INBOUND_AGENT_VERSION=3327.v868139a_d00e0-2
 ARG JDK21_VERSION=21.0.7_6
 
 FROM eclipse-temurin:${JDK21_VERSION}-jdk-jammy AS jdk21
@@ -10,7 +10,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 ## Repeating the ARG from top level to allow them on this scope
 # Ref - https://docs.docker.com/engine/reference/builder/#scope
-ARG JENKINS_INBOUND_AGENT_VERSION=3327.v868139a_d00e0-1
+ARG JENKINS_INBOUND_AGENT_VERSION=3327.v868139a_d00e0-2
 
 ## The packages installed below should always be in their "latest" available version (otherwise needs a separated block), hence disabling the lint rule DL3008
 # hadolint ignore=DL3008
