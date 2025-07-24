@@ -41,7 +41,7 @@ RUN apt-get -y update && \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG GH_VERSION=2.76.0
+ARG GH_VERSION=2.76.1
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_$(dpkg --print-architecture).tar.gz" \
     && tar -xvf /tmp/gh.tar.gz --strip-components=2 --directory /usr/local/bin/ --wildcards "*/gh" \
