@@ -20,7 +20,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.asdf.version
       value: 0.15.0
     - key: io.jenkins-infra.tools.azcopy.version
-      value: 10.29.1
+      value: 10.30.0
     - key: io.jenkins-infra.tools.azure-cli.version
       value: 2.76.0
     - key: io.jenkins-infra.tools.typos.version
