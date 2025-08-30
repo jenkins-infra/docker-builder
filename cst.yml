@@ -24,7 +24,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.azure-cli.version
       value: 2.76.0
     - key: io.jenkins-infra.tools.typos.version
-      value: 1.35.6
+      value: 1.35.7
     - key: io.jenkins-infra.tools.typos-checkstyle.version
       value: 0.2.0
   entrypoint: ["/usr/local/bin/entrypoint.sh"]
