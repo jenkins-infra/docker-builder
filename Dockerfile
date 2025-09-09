@@ -71,7 +71,7 @@ RUN ARCH="$(dpkg --print-architecture)"; \
     && netlify-deploy --help
 
 ## Install azcopy
-ARG AZCOPY_VERSION=10.30.0
+ARG AZCOPY_VERSION=10.30.1
 RUN ARCH="$(uname -m)"; \
     case "${ARCH}" in \
         aarch64|arm64) \
