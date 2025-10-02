@@ -12,7 +12,7 @@ metadataTest:
       value: ".*git.*"
       isRegex: true
     - key: io.jenkins-infra.tools.gh.version
-      value: 2.80.0
+      value: 2.81.0
     - key: io.jenkins-infra.tools.jenkins-inbound-agent.version
       value: 3341.v0766d82b_dec0-3
     - key: io.jenkins-infra.tools.netlify-deploy.version
@@ -24,7 +24,7 @@ metadataTest:
     - key: io.jenkins-infra.tools.azure-cli.version
       value: 2.77.0
     - key: io.jenkins-infra.tools.typos.version
-      value: 1.37.0
+      value: 1.37.1
     - key: io.jenkins-infra.tools.typos-checkstyle.version
       value: 0.2.0
   entrypoint: ["/usr/local/bin/entrypoint.sh"]

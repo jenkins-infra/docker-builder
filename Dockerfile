@@ -41,7 +41,7 @@ RUN apt-get -y update && \
     apt-get clean &&\
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG GH_VERSION=2.80.0
+ARG GH_VERSION=2.81.0
 RUN curl --silent --show-error --location --output /tmp/gh.tar.gz \
     "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_$(dpkg --print-architecture).tar.gz" \
     && tar -xvf /tmp/gh.tar.gz --strip-components=2 --directory /usr/local/bin/ --wildcards "*/gh" \
@@ -111,7 +111,7 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG TYPOS_VERSION=1.37.0
+ARG TYPOS_VERSION=1.37.1
 RUN curl --silent --show-error --location --output /tmp/typos.tar.gz "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz" \
     && tar xvfz /tmp/typos.tar.gz -C /usr/local/bin ./typos \
     && chmod a+x /usr/local/bin/typos \
