@@ -111,7 +111,7 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ARG TYPOS_VERSION=1.39.1
+ARG TYPOS_VERSION=1.39.2
 RUN curl --silent --show-error --location --output /tmp/typos.tar.gz "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz" \
     && tar xvfz /tmp/typos.tar.gz -C /usr/local/bin ./typos \
     && chmod a+x /usr/local/bin/typos \
